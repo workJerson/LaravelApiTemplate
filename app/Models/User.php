@@ -47,4 +47,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Student::class);
     }
+
+    public function cmsProfile()
+    {
+        return $this->hasOne(CmsProfile::class);
+    }
+
+    public function userDetails()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
 }
