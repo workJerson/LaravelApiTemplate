@@ -15,6 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('program_id');
             $table->unsignedBigInteger('hub_id');
             $table->string('prefixed_id')->nullable();
@@ -25,6 +26,7 @@ class CreateTransactionsTable extends Migration
             $table->timestamps();
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('hub_id')->references('id')->on('hubs');
+            $table->foreign('student_id')->references('id')->on('students');
         });
     }
 
