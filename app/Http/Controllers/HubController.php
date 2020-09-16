@@ -54,7 +54,7 @@ class HubController extends Controller
     {
         $hubObject = $hub->load([
             'coordinators',
-            'transactions',
+            // 'transactions',
         ]);
 
         return response($hubObject);
