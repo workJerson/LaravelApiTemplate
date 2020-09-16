@@ -13,7 +13,7 @@ class CreateHubRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class CreateHubRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+            ],
+            'description' => [
+                'required',
+                'string',
+            ],
+            'status' => [
+                'required',
+                'string',
+            ],
         ];
     }
 }
