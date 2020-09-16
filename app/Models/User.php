@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
+    public function coordinator()
+    {
+        return $this->hasOne(Coordinator::class);
+    }
+
     public function cmsProfile()
     {
         return $this->hasOne(CmsProfile::class);
