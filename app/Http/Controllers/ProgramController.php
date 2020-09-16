@@ -38,7 +38,7 @@ class ProgramController extends Controller
      */
     public function store(CreateProgramRequest $request, Program $program)
     {
-        $programObject = $program->create($request->valdiated());
+        $programObject = $program->create($request->validated());
 
         return response($programObject, 201);
     }
