@@ -13,7 +13,7 @@ class CreateSchoolRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class CreateSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+            ],
+            'address' => [
+                'required',
+                'string',
+            ],
+            'status' => [
+                'required',
+                'numeric',
+            ],
         ];
     }
 }
