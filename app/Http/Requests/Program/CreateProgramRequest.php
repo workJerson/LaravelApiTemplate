@@ -13,7 +13,7 @@ class CreateProgramRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,23 @@ class CreateProgramRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => [
+                'string',
+                'required',
+            ],
+            'description' => [
+                'string',
+                'required',
+            ],
+            'total_amount' => [
+                'numeric',
+                'required',
+                'between:0.000001,999999999999.999999',
+            ],
+            'status' => [
+                'numeric',
+                'required',
+            ],
         ];
     }
 }
