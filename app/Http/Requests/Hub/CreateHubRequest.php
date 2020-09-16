@@ -33,7 +33,7 @@ class CreateHubRequest extends FormRequest
                 'string',
             ],
             'status' => [
-                'required',
+                'numeric',
                 'string',
             ],
         ];
