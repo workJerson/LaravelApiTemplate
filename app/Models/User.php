@@ -43,6 +43,47 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function findForPassport($email)
+    {
+        return self::where('email', $email)->first();
+    }
+
+    /**
+     * Increment the login attempts of the user.
+     */
+    public function incrementLoginAttempts()
+    {
+        $this->increment('login_attempts');
+
+        if ($this->login_attempts >= 3) {
+            $this->deactivate();
+        }
+    }
+
+    /**
+     * Clear the user's number of login attempts.
+     */
+    public function clearLoginAttempts()
+    {
+        $this->login_attempts = 0;
+        $this->save();
+    }
+
+    /**
+     * Deactivate the user.
+     */
+    public function deactivate()
+    {
+        $this->status = 0;
+
+        $this->save();
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
     public function student()
     {
         return $this->hasOne(Student::class);
