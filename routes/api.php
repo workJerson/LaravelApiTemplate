@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HubController;
 use App\Http\Controllers\ProgramController;
@@ -44,3 +45,4 @@ Route::resource('school', SchoolController::class, ['except' => ['create', 'dest
 Route::resource('student', StudentController::class, ['except' => ['create', 'destroy', 'edit']]);
 Route::resource('user', UserController::class, ['except' => ['create', 'destroy', 'edit']]);
 Route::resource('transaction', TransactionController::class, ['except' => ['create', 'destroy', 'edit']]);
+Route::get('dashboard', DashboardController::class)->name('dashboard');
