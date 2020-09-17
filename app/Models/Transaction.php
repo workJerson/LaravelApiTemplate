@@ -12,8 +12,9 @@ class Transaction extends Model
     use HasFactory;
     use Filterable;
 
-    protected $filterable = [
+    protected $fillable = [
         'prefixed_id',
+        'program_id',
         'total_actual_amount',
         'total_amount_paid',
         'program_id',
@@ -22,6 +23,15 @@ class Transaction extends Model
         'status',
         'event_status',
     ];
+
+    public function searchable()
+    {
+        return [
+            'hub_id',
+            'status',
+            'event_status',
+        ];
+    }
 
     public function setPrefixedIdAttribute($value)
     {

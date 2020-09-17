@@ -13,7 +13,7 @@ class CreateTransactionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,25 @@ class CreateTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'program_id' => [
+                'required',
+                'numeric',
+                'exists:programs,id',
+            ],
+            'hub_id' => [
+                'required',
+                'numeric',
+                'exists:hubs,id',
+            ],
+            'student_id' => [
+                'required',
+                'numeric',
+                'exists:students,id',
+            ],
+            // 'start_month' => [
+            //     'required',
+            //     'string',
+            // ],
         ];
     }
 }

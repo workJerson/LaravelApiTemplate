@@ -4,10 +4,60 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\ResourceFilters;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
+use App\Models\Student;
 use App\Models\Transaction;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
+    protected $details = [
+        [
+            'type' => 'Program Orientation',
+            'date' => 'September ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'October ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'November ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'December ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'January ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'February ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'March ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'April ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'May ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'June ',
+        ],
+        [
+            'type' => 'Training/Seminar Fee',
+            'date' => 'July ',
+        ],
+    ];
+
     public function __construct()
     {
     }
@@ -20,7 +70,7 @@ class TransactionController extends Controller
     public function index(ResourceFilters $filters, Transaction $transaction)
     {
         return $this->generateCachedResponse(function () use ($filters, $transaction) {
-            if (request()->user()->is_web) {
+            if (request()->user()->account_type == 1) {
                 if (request()->user()->coordinator != null) {
                     $actor = 'coordinator';
                 } else {
@@ -28,7 +78,7 @@ class TransactionController extends Controller
                 }
                 $transactions = request()
                     ->user()
-                    ->{$actor}()
+                    ->{$actor}
                     ->transactions()
                     ->filter($filters);
             } else {
@@ -53,8 +103,34 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateTransactionRequest $request)
+    public function store(CreateTransactionRequest $request, Transaction $transaction)
     {
+        $now = Carbon::now();
+        $request->validated();
+        try {
+            DB::beginTransaction();
+            if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
+                $transactionObject = $transaction->create($request->all());
+
+                foreach ($this->details as $key => $detail) {
+                    $transactionObject
+                    ->transactionDetails()
+                    ->create([
+                        'type' => $detail['type'],
+                        'transaction_date' => $detail['date'].$now->year,
+                        'event_status' => 1,
+                    ]);
+                }
+            } else {
+                return response()->json(['message' => 'Student has an ongoing transaction'], 400);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
+        }
+
+        return response($transactionObject);
     }
 
     /**

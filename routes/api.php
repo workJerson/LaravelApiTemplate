@@ -22,27 +22,28 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::group(
-    ['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'],
-    function () {
-        Route::post('login', 'AuthController@login');
-    }
-);
-Route::group(
-    ['middleware' => 'auth:api'],
-    function () {
-        // Routes Here
-    }
-);
-
-Route::resource('hub', HubController::class, ['except' => ['create', 'edit']]);
-Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'edit']]);
-Route::resource('course', CourseController::class, ['except' => ['create', 'edit']]);
-Route::resource('group', GroupController::class, ['except' => ['create', 'edit']]);
-Route::resource('program', ProgramController::class, ['except' => ['create', 'edit']]);
-Route::resource('school', SchoolController::class, ['except' => ['create', 'edit']]);
-Route::resource('student', StudentController::class, ['except' => ['create', 'edit']]);
-Route::resource('user', UserController::class, ['except' => ['create', 'edit']]);
-Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
-Route::get('dashboard', DashboardController::class)->name('dashboard');
+// Route::group(
+//     ['middleware' => 'cors'],
+//     function () {
+        Route::group(
+            ['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'],
+            function () {
+                Route::post('login', 'AuthController@login');
+            }
+        );
+        Route::group(
+            ['middleware' => 'auth:api'],
+            function () {
+                Route::resource('hub', HubController::class, ['except' => ['create', 'edit']]);
+                Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'edit']]);
+                Route::resource('course', CourseController::class, ['except' => ['create', 'edit']]);
+                Route::resource('group', GroupController::class, ['except' => ['create', 'edit']]);
+                Route::resource('program', ProgramController::class, ['except' => ['create', 'edit']]);
+                Route::resource('school', SchoolController::class, ['except' => ['create', 'edit']]);
+                Route::resource('student', StudentController::class, ['except' => ['create', 'edit']]);
+                Route::resource('user', UserController::class, ['except' => ['create', 'edit']]);
+                Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
+                Route::get('dashboard', DashboardController::class)->name('dashboard');
+            }
+        );
+    // });

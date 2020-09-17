@@ -3,6 +3,7 @@
 namespace App\Http\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Schema;
 
 class ResourceFilters extends QueryFilters
@@ -222,7 +223,7 @@ class ResourceFilters extends QueryFilters
         }
 
         $queryToAppend = $isOr ? 'orWhere' : 'where';
-        $modifier = array_last(explode('|', $value));
+        $modifier = Arr::last(explode('|', $value));
         $searchOperator = 'like';
         $searchValue = substr($value, 0, strrpos($value, '|'));
 

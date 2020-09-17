@@ -13,6 +13,7 @@ class TransactionDetail extends Model
 
     protected $fillable = [
         'type',
+        'transaction_date',
         'session_cost',
         'official_receipt_number',
         'registration_fee',

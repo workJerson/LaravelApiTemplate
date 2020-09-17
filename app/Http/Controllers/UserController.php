@@ -94,7 +94,7 @@ class UserController extends Controller
 
         // Send Email
 
-        return response($user, 201);
+        return response($userObject, 201);
     }
 
     /**
