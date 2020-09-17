@@ -36,13 +36,13 @@ Route::group(
     }
 );
 
-Route::resource('hub', HubController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('course', CourseController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('group', GroupController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('program', ProgramController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('school', SchoolController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('student', StudentController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('user', UserController::class, ['except' => ['create', 'destroy', 'edit']]);
-Route::resource('transaction', TransactionController::class, ['except' => ['create', 'destroy', 'edit']]);
+Route::resource('hub', HubController::class, ['except' => ['create', 'edit']]);
+Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'edit']]);
+Route::resource('course', CourseController::class, ['except' => ['create', 'edit']]);
+Route::resource('group', GroupController::class, ['except' => ['create', 'edit']]);
+Route::resource('program', ProgramController::class, ['except' => ['create', 'edit']]);
+Route::resource('school', SchoolController::class, ['except' => ['create', 'edit']]);
+Route::resource('student', StudentController::class, ['except' => ['create', 'edit']]);
+Route::resource('user', UserController::class, ['except' => ['create', 'edit']]);
+Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
 Route::get('dashboard', DashboardController::class)->name('dashboard');
