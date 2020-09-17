@@ -34,7 +34,7 @@ class CreateHubRequest extends FormRequest
             ],
             'status' => [
                 'numeric',
-                'string',
+                'between:1,2',
             ],
         ];
     }

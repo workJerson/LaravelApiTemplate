@@ -40,7 +40,7 @@ class HubController extends Controller
      */
     public function store(CreateHubRequest $request, Hub $hub)
     {
-        $hubObject = $hub->create($request->validate());
+        $hubObject = $hub->create($request->validated());
 
         return response($hubObject, 201);
     }
