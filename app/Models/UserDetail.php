@@ -12,7 +12,9 @@ class UserDetail extends Model
     use Filterable;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'middle_name',
         'address',
         'birth_date',
         'contact_number',

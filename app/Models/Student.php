@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Filterable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,9 @@ class Student extends Model
     use Filterable;
 
     protected $fillable = [
+        'student_number',
         'user_id',
+        'course_id',
         'school_id',
         'position',
         'ccaps',
@@ -45,5 +48,13 @@ class Student extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function setStudentNumberAttribute($value)
+    {
+        $year = Carbon::parse($this->attributes['created_at'])->format('y');
+        $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
+
+        $this->attributes['student_number'] = "STD-$year-$paddedId";
     }
 }

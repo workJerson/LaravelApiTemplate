@@ -19,8 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
          'email',
          'password',
-         'is_web',
-         'is_cms',
+         'account_type',
          'status',
          'login_attempts',
     ];
@@ -99,7 +98,7 @@ class User extends Authenticatable
         return $this->hasOne(CmsProfile::class);
     }
 
-    public function userDetails()
+    public function userDetail()
     {
         return $this->hasOne(UserDetail::class);
     }
