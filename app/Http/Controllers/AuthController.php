@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function testPdf()
+    {
+        $pdf = PDF::loadView('pdf.soa');
+
+        return $pdf->download('invoice.pdf');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
