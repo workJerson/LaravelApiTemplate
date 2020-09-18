@@ -28,6 +28,6 @@ class UserDetail extends Model
 
     public function getFullNameAttribute()
     {
-        return ucfirst($this->first_name).' '.ucfirst($this->last_name).' '.ucfirst($this->middle_name ?? '');
+        return ucfirst($this->last_name).', '.ucfirst($this->first_name).' '.ucfirst($this->middle_name ?? '');
     }
 }
