@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\ResourceFilters;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
+use App\Http\Requests\Transaction\GenerateSoaRequest;
 use App\Models\Student;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -60,6 +62,26 @@ class TransactionController extends Controller
 
     public function __construct()
     {
+    }
+
+    public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
+    {
+        $request->validated();
+        $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
+            'transactionDetails',
+            'transactionDetails.payments',
+            'hub',
+            'program',
+            'student',
+            'student.user',
+            'student.user.userDetail',
+            'student.school',
+            'student.course',
+        ])->get();
+
+        $pdf = PDF::loadView('pdf.soa', $transactions);
+
+        return $pdf->download('invoice.pdf');
     }
 
     /**

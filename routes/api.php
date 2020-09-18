@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
         Route::group(
             ['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'],
             function () {
-                Route::get('pdf', 'AuthController@testPdf');
+                Route::post('pdf', 'TransactionController@generateSoa');
                 Route::post('login', 'AuthController@login');
             }
         );
