@@ -32,7 +32,7 @@ class CreateProgramRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'total_amount' => [
+            'total_price' => [
                 'numeric',
                 'required',
                 'between:0.000001,999999999999.999999',

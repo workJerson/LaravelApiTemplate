@@ -14,7 +14,7 @@ class Program extends Model
     protected $fillable = [
         'name',
         'description',
-        'total_amount',
+        'total_price',
         'status',
     ];
 
