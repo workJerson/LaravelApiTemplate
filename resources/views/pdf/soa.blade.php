@@ -36,10 +36,56 @@
         hr {
             margin: 5px 5px;
         }
+        .column {
+            float: left;
+            width: 50%;
+        }
+
+/* Clear floats after the columns */
+        .container:after {
+            content: "";
+            display: table;
+            clear: both;
+            margin: 0px 5px;
+        }
+        .columnimage {
+            float: left;
+            width: 33.33%;
+            padding: 5px;
+        }
+
+        /* Clearfix (clear floats) */
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
     </style>
 </head>
 <body>
 @foreach ($transactions as $transaction)
+<div class="container">
+    <div class="columnimage">
+        <div class="row">
+            <div class="column-image">
+              <img src="https://i.imgur.com/HTezwUg.png" alt="Snow" style="width:100%">
+            </div>
+            <div class="column-image">
+              <img src="https://i.imgur.com/HTezwUg.png" alt="Forest" style="width:100%">
+            </div>
+            <div class="column-image">
+              <img src="https://i.imgur.com/HTezwUg.png" alt="Mountains" style="width:100%">
+            </div>
+          </div>
+    </div>
+    <div class="column">
+        <p>Republic of the Philippines</p>
+        <p>Department of Interior and Local Government</p>
+        <p>PHILIPPINE COUNCILORS LEAGUE</p>
+        <p>PCL LEGISLATIVE ACADEMY</p>
+        <p>PCL Center & Hostel: Coastal Road, Barangay Daneil Fajardo, Las Piñas City</p>
+    </div>
+</div>
     <hr style= "border: 3px solid red">
     <hr style= "border: 3px solid blue" >
     <center>
@@ -92,7 +138,10 @@
         <p>Globe: +63916-331-8962</p>
         <p>Email: jameslouiebaldoza@gmail.com</p>
     </center>
-    <div class="page-break"></div>
+
+    @if(!$loop->last)
+        <div class="page-break"></div>
+    @endif
 @endforeach
 </body>
 </html>
