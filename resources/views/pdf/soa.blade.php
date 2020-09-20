@@ -48,35 +48,19 @@
             clear: both;
             margin: 0px 5px;
         }
-        .columnimage {
-            float: left;
+        .logo {
             width: 33.33%;
-            padding: 5px;
-        }
-
-        /* Clearfix (clear floats) */
-        .row::after {
-            content: "";
-            clear: both;
-            display: table;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
 @foreach ($transactions as $transaction)
 <div class="container">
-    <div class="columnimage">
-        <div class="row">
-            <div class="column-image">
-              <img src="https://i.imgur.com/HTezwUg.png" alt="Snow" style="width:100%">
-            </div>
-            <div class="column-image">
-              <img src="https://i.imgur.com/HTezwUg.png" alt="Forest" style="width:100%">
-            </div>
-            <div class="column-image">
-              <img src="https://i.imgur.com/HTezwUg.png" alt="Mountains" style="width:100%">
-            </div>
-          </div>
+    <div class="column">
+        <img src="https://i.imgur.com/HTezwUg.png" alt="Snow" class="logo">
+        <img src="https://i.imgur.com/HTezwUg.png" alt="Forest" class="logo">
+        <img src="https://i.imgur.com/HTezwUg.png" alt="Mountains" class="logo">
     </div>
     <div class="column">
         <p>Republic of the Philippines</p>

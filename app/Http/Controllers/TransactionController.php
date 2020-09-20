@@ -158,12 +158,19 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Transaction $transaction)
     {
+        $transactionObject = $transaction->load([
+            'hub',
+            'program',
+            'student',
+            'transactionDetails',
+            'transactionDetails.payments',
+        ]);
+
+        return response($transactionObject);
     }
 
     /**
@@ -180,22 +187,25 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateTransactionRequest $request, $id)
+    public function update(CreateTransactionRequest $request, Transaction $transaction)
     {
+        $transaction->update($request->validated());
+
+        return response($transaction);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Transaction $transaction)
     {
+        $transaction->status = 0;
+        $transaction->save();
+
+        return response(['message' => 'Deleted successfully']);
     }
 }

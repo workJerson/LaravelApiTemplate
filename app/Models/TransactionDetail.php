@@ -31,4 +31,14 @@ class TransactionDetail extends Model
     {
         return $this->hasMany(TransactionDetailPayment::class);
     }
+
+    public function getAllOfficialReceiptAttribute()
+    {
+        return $this->payments->pluck('official_receipt_number')->implode(',');
+    }
+
+    public function getTotalAmountPaid()
+    {
+        return $this->payments->sum('payment_made');
+    }
 }
