@@ -80,24 +80,25 @@
     <p>To: {{ $transaction->student->user->userDetail->full_name }}</p>
     <p>{{ $transaction->student->user->userDetail->address }}</p>
     <p>{{ $transaction->hub->name }} Hub</p>
+    <p>Below is the current statement of your account. Your total amount due against the program cost is <span>Php {{ $transaction->program->total_price - $transaction->transactionDetails->sum('payment_made') }}</span>, payable upon the indiciation session cost</p>
     <p>Table 1. Schedule of Payments</p>
     <table>
         <tr>
             <th>Transactions</th>
             <th>Transaction Date</th>
             <th>OR No.</th>
+            <th>Session Cost</th>
             <th>Registration Fee</th>
-            <th>Food</th>
             <th>Payment Made</th>
         </tr>
         @foreach ($transaction->transactionDetails as $transactionDetail)
         <tr>
             <td>{{ $transactionDetail->type }}</td>
             <td>{{ $transactionDetail->transaction_date }}</td>
-            <td>{{ $transactionDetail->session_cost ?? '--' }}</td>
-            <td>{{ $transactionDetail->registration_fee ?? '0.00' }}</td>
-            <td>{{ $transactionDetail->food_fee ?? '0.00' }}</td>
-            <td>{{ $transactionDetail->food_fee  ?? '0.00'}}</td>
+            <td>{{ $transactionDetail->all_official_receipt }}</td>
+            <td>{{ $transactionDetail->session_cost ?? '.00' }}</td>
+            <td>{{ $transactionDetail->registration_fee ?? '.00' }}</td>
+            <td>{{ $transactionDetail->payment_made  ?? '.00'}}</td>
         </tr>
         @endforeach
         <tr>
@@ -106,17 +107,17 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>123123.12321</td>
+            <td>{{ $transaction->transactionDetails->sum('payment_made') ?? '.00' }}</td>
         </tr>
     </table>
     <p>*LEGEND: Registration fee less Allocation for Food equals Total Payments entered to your account.</p>
-    <p>Training/Seminar Fees (Program Cost)</p>
-    <p>Final Validation/Exit Conference</p>
-    <p>Conferment/Graduation Ceremonies</p>
-    <p>TOTAL PROGRAM COST</p>
-    <p>Less: Total Payments made as of to date</p>
+    <p>Training/Seminar Fees (Program Cost) Php 65,000.00</p>
+    <p>Final Validation/Exit Conference 5,000.00</p>
+    <p>Conferment/Graduation Ceremonies 5,000.00</p>
+    <p>TOTAL PROGRAM COST Php {{ $transaction->program->total_price }}</p>
+    <p>Less: Total Payments made as of to date {{ $transaction->transactionDetails->sum('payment_made') }}</p>
     <center>
-        <p>TOTAL ACCOUNT BALANCE</p>
+        <p>TOTAL ACCOUNT BALANCE {{ $transaction->program->total_price - $transaction->transactionDetails->sum('payment_made') }}</p>
         <p>If you have any questions/queries please contact us at:</p>
         <p>Smart: +63930-909-8564</p>
         <p>Globe: +63916-331-8962</p>
