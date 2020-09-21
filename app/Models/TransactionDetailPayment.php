@@ -14,7 +14,9 @@ class TransactionDetailPayment extends Model
     protected $fillable = [
         'transaction_detail_id',
         'official_receipt_number',
-        'payment_made',
+        'session_cost',
+        'registration_fee',
+        'food_fee',
     ];
 
     public function transactionDetail()

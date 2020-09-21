@@ -14,9 +14,6 @@ class TransactionDetail extends Model
     protected $fillable = [
         'type',
         'transaction_date',
-        'session_cost',
-        'registration_fee',
-        'food_fee',
         'status',
         'transaction_id',
         'event_status',
@@ -39,6 +36,8 @@ class TransactionDetail extends Model
 
     public function getTotalAmountPaid()
     {
-        return $this->payments->sum('payment_made');
+        return $this->payments->sum('food_fee')
+            + $this->payments->sum('registration_fee')
+            + $this->payments->sum('session_cost');
     }
 }

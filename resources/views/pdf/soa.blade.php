@@ -87,8 +87,8 @@
             <th>Transactions</th>
             <th>Transaction Date</th>
             <th>OR No.</th>
-            <th>Session Cost</th>
             <th>Registration Fee</th>
+            <th>Session Cost</th>
             <th>Payment Made</th>
         </tr>
         @foreach ($transaction->transactionDetails as $transactionDetail)
@@ -96,8 +96,8 @@
             <td>{{ $transactionDetail->type }}</td>
             <td>{{ $transactionDetail->transaction_date }}</td>
             <td>{{ $transactionDetail->all_official_receipt }}</td>
-            <td>{{ $transactionDetail->session_cost ?? '.00' }}</td>
             <td>{{ $transactionDetail->registration_fee ?? '.00' }}</td>
+            <td>{{ $transactionDetail->session_cost ?? '.00' }}</td>
             <td>{{ $transactionDetail->payment_made  ?? '.00'}}</td>
         </tr>
         @endforeach
