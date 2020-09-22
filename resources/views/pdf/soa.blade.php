@@ -49,24 +49,29 @@
             margin: 0px 5px;
         }
         .logo {
-            width: 33.33%;
-            padding: 10px;
+            width: 100px;
+            height: 100px;
+            padding: 0px 10px;
+            margin-top: 15px;
+        }
+        .logo-container {
+            padding: 0;
         }
     </style>
 </head>
 <body>
 @foreach ($transactions as $transaction)
 <div class="container">
-    <div class="column">
-        <img src="https://i.imgur.com/HTezwUg.png" alt="Snow" class="logo">
-        <img src="https://i.imgur.com/HTezwUg.png" alt="Forest" class="logo">
-        <img src="https://i.imgur.com/HTezwUg.png" alt="Mountains" class="logo">
+    <div class="column logo-container">
+        <img src="https://i.imgur.com/moh0QKH.jpg" class="logo">
+        <img src="https://i.imgur.com/moh0QKH.jpg" class="logo">
+        <img src="https://i.imgur.com/NbCvADc.jpg" class="logo">
     </div>
     <div class="column">
-        <p>Republic of the Philippines</p>
+        <p style="font-weight:bold">Republic of the Philippines</p>
         <p>Department of Interior and Local Government</p>
-        <p>PHILIPPINE COUNCILORS LEAGUE</p>
-        <p>PCL LEGISLATIVE ACADEMY</p>
+        <p style="font-weight:bold; color:blue">PHILIPPINE COUNCILORS LEAGUE</p>
+        <p style="font-weight:bold; font-size:1.5em"">PCL LEGISLATIVE ACADEMY</p>
         <p>PCL Center & Hostel: Coastal Road, Barangay Daneil Fajardo, Las Piñas City</p>
     </div>
 </div>
@@ -75,13 +80,17 @@
     <center>
         <h1>Statement of Account</h1>
         <p>{{ $transaction->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
-        <p>{{ $transaction->student->course->name}}</p>
+        <p style="font-style: italic">{{ $transaction->student->course->name}}</p>
     </center>
-    <p>To: {{ $transaction->student->user->userDetail->full_name }}</p>
-    <p>{{ $transaction->student->user->userDetail->address }}</p>
-    <p>{{ $transaction->hub->name }} Hub</p>
-    <p>Below is the current statement of your account. Your total amount due against the program cost is <span>Php {{ $transaction->program->total_price - $transaction->transactionDetails->sum('payment_made') }}</span>, payable upon the indiciation session cost</p>
+    <div style="width: 100%; padding: 0 60px;">
+        <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>
+        <div style="width: 100%; padding-left: 35px; margin-bottom: 30px;">
+            <p>{{ $transaction->student->user->userDetail->address }}</p>
+            <p>{{ $transaction->hub->name }} Hub</p>
+        </div>
+        <p style="text-indent: 2em">Below is the current statement of your account. Your total amount due against the program cost is <span style="text-decoration:underline; font-weight:bold">Php {{ $transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made') }}</span>, payable upon the indiciation session cost</p>
     <p>Table 1. Schedule of Payments</p>
+    </div>
     <table>
         <tr>
             <th>Transactions</th>
@@ -96,9 +105,9 @@
             <td>{{ $transactionDetail->type }}</td>
             <td>{{ $transactionDetail->transaction_date }}</td>
             <td>{{ $transactionDetail->all_official_receipt }}</td>
-            <td>{{ $transactionDetail->registration_fee ?? '.00' }}</td>
-            <td>{{ $transactionDetail->session_cost ?? '.00' }}</td>
-            <td>{{ $transactionDetail->payment_made  ?? '.00'}}</td>
+            <td>{{ $transactionDetail->total_registration_fee ?? '.00' }}</td>
+            <td>{{ $transactionDetail->total_session_cost ?? '.00' }}</td>
+            <td>{{ $transactionDetail->total_payment_made  ?? '.00'}}</td>
         </tr>
         @endforeach
         <tr>
@@ -107,17 +116,17 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ $transaction->transactionDetails->sum('payment_made') ?? '.00' }}</td>
+            <td>{{ $transaction->transactionDetails->sum('total_payment_made') ?? '.00' }}</td>
         </tr>
     </table>
-    <p>*LEGEND: Registration fee less Allocation for Food equals Total Payments entered to your account.</p>
-    <p>Training/Seminar Fees (Program Cost) Php 65,000.00</p>
+    {{-- <p>*LEGEND: Registration fee less Allocation for Food equals Total Payments entered to your account.</p> --}}
+    <p>Training/Seminar Fees (Program Cost) Php {{$transaction->program->total_price - 10000}}</p>
     <p>Final Validation/Exit Conference 5,000.00</p>
     <p>Conferment/Graduation Ceremonies 5,000.00</p>
     <p>TOTAL PROGRAM COST Php {{ $transaction->program->total_price }}</p>
-    <p>Less: Total Payments made as of to date {{ $transaction->transactionDetails->sum('payment_made') }}</p>
+    <p>Less: Total Payments made as of to date {{ $transaction->transactionDetails->sum('total_payment_made') }}</p>
     <center>
-        <p>TOTAL ACCOUNT BALANCE {{ $transaction->program->total_price - $transaction->transactionDetails->sum('payment_made') }}</p>
+        <p>TOTAL ACCOUNT BALANCE {{ $transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made') }}</p>
         <p>If you have any questions/queries please contact us at:</p>
         <p>Smart: +63930-909-8564</p>
         <p>Globe: +63916-331-8962</p>

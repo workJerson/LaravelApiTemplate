@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\ResourceFilters;
+use App\Models\Coordinator;
 use Illuminate\Http\Request;
 
 class CoordinatorController extends Controller
@@ -11,9 +13,13 @@ class CoordinatorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ResourceFilters $filters, Coordinator $coordinator)
     {
-        //
+        return $this->generateCachedResponse(function () use ($filters, $coordinator) {
+            $coordinators = $coordinator->filter($filters);
+
+            return $this->paginateOrGet($coordinators);
+        });
     }
 
     /**
@@ -23,62 +29,65 @@ class CoordinatorController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Coordinator $coordinator)
     {
-        //
+        $coordinatorObject = $coordinator->load([
+            'user',
+            'user.userDetail',
+            'hub',
+        ]);
+
+        return response($coordinatorObject);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Coordinator $coordinator)
     {
-        //
+        $coordinator->status = 0;
+        $coordinator->save();
+
+        return response(['message' => 'Deleted successfully'], 200);
     }
 }

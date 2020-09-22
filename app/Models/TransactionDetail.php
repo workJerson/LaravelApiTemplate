@@ -34,7 +34,22 @@ class TransactionDetail extends Model
         return $this->payments->pluck('official_receipt_number')->implode(',');
     }
 
-    public function getTotalAmountPaid()
+    public function getTotalFoodFeeAttribute()
+    {
+        return $this->payments->sum('food_fee');
+    }
+
+    public function getTotalRegistrationFeeAttribute()
+    {
+        return $this->payments->sum('registration_fee');
+    }
+
+    public function getTotalSessionCostAttribute()
+    {
+        return $this->payments->sum('session_cost');
+    }
+
+    public function getTotalPaymentMadeAttribute()
     {
         return $this->payments->sum('food_fee')
             + $this->payments->sum('registration_fee')
