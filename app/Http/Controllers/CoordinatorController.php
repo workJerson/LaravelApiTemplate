@@ -16,7 +16,7 @@ class CoordinatorController extends Controller
     public function index(ResourceFilters $filters, Coordinator $coordinator)
     {
         return $this->generateCachedResponse(function () use ($filters, $coordinator) {
-            $coordinators = $coordinator->filter($filters);
+            $coordinators = $coordinator->with(['user', 'hub'])->filter($filters);
 
             return $this->paginateOrGet($coordinators);
         });
