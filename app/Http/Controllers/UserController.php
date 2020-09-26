@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index(ResourceFilters $filters, User $user)
     {
         return $this->generateCachedResponse(function () use ($filters, $user) {
-            $users = $user->filter($filters);
+            $users = $user->with(['userDetails'])->filter($filters);
 
             return $this->paginateOrGet($users);
         });
@@ -130,9 +130,31 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request)
     {
-        $user->update($request->validated());
+        $request->validated();
+        $user = request()->user();
+        try {
+            DB::beginTransaction();
+            $user->update($request->all());
+            $user->userDetail->update($request->all());
+
+            switch ($user->account_type) {
+                case 1:
+                    $user->student->update($request->all());
+                break;
+                case 2:
+                    $user->coordinator->update($request->all());
+                break;
+                case 3:
+                    $user->cmsProfile->update($request->all());
+                break;
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
 
         return response($user);
     }
