@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Route;
         Route::group(
             ['middleware' => 'auth:api'],
             function () {
+                Route::get('me', 'GetAuthenticatedUserInfo')->name('me');
                 Route::resource('hub', HubController::class, ['except' => ['create', 'edit']]);
                 Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'edit']]);
                 Route::resource('course', CourseController::class, ['except' => ['create', 'edit']]);
