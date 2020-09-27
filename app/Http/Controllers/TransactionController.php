@@ -66,6 +66,14 @@ class TransactionController extends Controller
 
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
+        // sendGridEmail([
+        //     'subject' => 'Welcome to Rightfield Printing and Supplies Ltd.',
+        //     'recipient' => 'jersonyanihh@gmail.com',
+        //     'recipient_name' => 'jerson',
+        //     'content' => 'Welcome to Rightfield Printing and Supplies Ltd. you can now order and use your account. You can login in this link <a href="http://ecom-project-2.s3-website-ap-southeast-1.amazonaws.com/#/"> Click here</a>',
+        // ]);
+
+        // return response('ok');
         $request->validated();
         $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
             'transactionDetails',

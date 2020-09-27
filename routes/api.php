@@ -3,6 +3,7 @@
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GetAuthenticatedUserInfo;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HubController;
 use App\Http\Controllers\ProgramController;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Route;
         Route::group(
             ['middleware' => 'auth:api'],
             function () {
+                Route::get('me', GetAuthenticatedUserInfo::class)->name('me');
                 Route::resource('hub', HubController::class, ['except' => ['create', 'edit']]);
                 Route::resource('coordinator', CoordinatorController::class, ['except' => ['create', 'edit']]);
                 Route::resource('course', CourseController::class, ['except' => ['create', 'edit']]);

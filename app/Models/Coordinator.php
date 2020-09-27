@@ -17,6 +17,18 @@ class Coordinator extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'hub_id',
+            'status',
+            'user_email',
+            'user_user_details_full_name',
+            'student_student_number',
+            'hub_name',
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -103,3 +103,32 @@ if (!function_exists('downloadPrivateFile')) {
         return response()->download($filepath);
     }
 }
+
+if (!function_exists('sendGridEmail')) {
+    function sendGridEmail($data)
+    {
+        require base_path().'/vendor/autoload.php'; // If you're using Composer (recommended)
+        // Comment out the above line if not using Composer
+        // require("<PATH TO>/sendgrid-php.php");
+        // If not using Composer, uncomment the above line and
+        // download sendgrid-php.zip from the latest release here,
+        // replacing <PATH TO> with the path to the sendgrid-php.php file,
+        // which is included in the download:
+        // https://github.com/sendgrid/sendgrid-php/releases
+        $email = new SendGrid\Mail\Mail();
+        $email->setFrom('plc.aws.service@gmail.com', 'Admin');
+        $email->setSubject($data['subject']);
+        $email->addTo($data['recipient'], $data['recipient_name']);
+        $email->addContent(
+            'text/html',
+            $data['content']
+        );
+        $sendGrid = new SendGrid(env('SEND_GRID_API_KEY'));
+        try {
+            $response = $sendGrid->send($email);
+            logger([$response]);
+        } catch (Exception $e) {
+            logger('Caught exception: '.$e->getMessage()."\n");
+        }
+    }
+}
