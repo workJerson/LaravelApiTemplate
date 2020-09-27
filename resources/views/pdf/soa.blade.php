@@ -17,21 +17,22 @@
             page-break-after: always;
         }
         table {
-            font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
+            padding: 0 45px;
         }
         th {
             background-color: #dddddd;
             border: 1px solid #000;
             text-align: center;
-            padding: 4px;
         }
         td {
             border: 1px solid #000;
             text-align: center;
-            margin-left: 3px;
-            margin-right: 3px;
+        }
+        .td-left {
+            text-align: left !important;
+            padding-left: 2px;
         }
         hr {
             margin: 5px 5px;
@@ -56,6 +57,9 @@
         }
         .logo-container {
             padding: 0;
+        }
+        .hr-currency {
+            margin: 0 !important;
         }
     </style>
 </head>
@@ -84,12 +88,18 @@
     </center>
     <div style="width: 100%; padding: 0 60px;">
         <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>
-        <div style="width: 100%; padding-left: 35px; margin-bottom: 30px;">
+        <div style="width: 100%; padding-left: 35px; margin-bottom: 15px;">
             <p>{{ $transaction->student->user->userDetail->address }}</p>
             <p>{{ $transaction->hub->name }} Hub</p>
         </div>
-        <p style="text-indent: 2em">Below is the current statement of your account. Your total amount due against the program cost is <span style="text-decoration:underline; font-weight:bold">Php {{ $transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made') }}</span>, payable upon the indiciation session cost</p>
-    <p>Table 1. Schedule of Payments</p>
+        <p style="text-indent: 2em">Below is the current statement of your account. Your total amount due against the program cost is
+            <span style="text-decoration:underline; font-weight:bold">
+                Php @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made'))
+            </span>
+            , payable upon the indiciation session cost
+        </p>
+        <br>
+        <p><span style="font-weight: bold"> Table 1.</span> <span style="font-style: italic">Schedule of Payments</span></p>
     </div>
     <table>
         <tr>
@@ -102,8 +112,8 @@
         </tr>
         @foreach ($transaction->transactionDetails as $transactionDetail)
         <tr>
-            <td>{{ $transactionDetail->type }}</td>
-            <td>{{ $transactionDetail->transaction_date }}</td>
+            <td class='td-left'>{{ $transactionDetail->type }}</td>
+            <td class='td-left'>{{ $transactionDetail->transaction_date }}</td>
             <td>{{ $transactionDetail->all_official_receipt }}</td>
             <td>{{ $transactionDetail->total_registration_fee ?? '.00' }}</td>
             <td>{{ $transactionDetail->total_session_cost ?? '.00' }}</td>
@@ -111,27 +121,57 @@
         </tr>
         @endforeach
         <tr>
-            <td>TOTAL:</td>
+            <td class='td-left' style="font-weight: bold;">TOTAL:</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ $transaction->transactionDetails->sum('total_payment_made') ?? '.00' }}</td>
+            <td>@convert($transaction->transactionDetails->sum('total_payment_made'))</td>
         </tr>
     </table>
+    <div class="container" style="margin: 10px 0 10px 90px;">
+        <div class="column">
+            <p>Training/Seminar Fees <span style="font-style: italic;">(Program Cost)</span></p>
+            <p>Final Validation/Exit Conference</p>
+            <p>Conferment/Graduation Ceremonies</p>
+            <p style="font-weight: bold;">TOTAL PROGRAM COST</p>
+            <p>Less: Total Payments made as of to date</p>
+            <br>
+            <p style="font-weight: bold;">TOTAL ACCOUNT BALANCE</p>
+        </div>
+        <div class="column" style="width: 25%; text-align: right; padding-left: 40px;">
+            <p><span style="padding-right: 60px;">Php</span>  @convert($transaction->program->total_price - 10000)</p>
+            <p>5,000.00</p>
+            <p>5,000.00</p>
+            <hr class="hr-currency">
+            <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span>  @convert($transaction->program->total_price)</p>
+            <p> @convert($transaction->transactionDetails->sum('total_payment_made'))</p>
+            <br>
+            <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span> @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made'))</p>
+            <hr class="hr-currency">
+        </div>
+    </div>
     {{-- <p>*LEGEND: Registration fee less Allocation for Food equals Total Payments entered to your account.</p> --}}
-    <p>Training/Seminar Fees (Program Cost) Php {{$transaction->program->total_price - 10000}}</p>
-    <p>Final Validation/Exit Conference 5,000.00</p>
-    <p>Conferment/Graduation Ceremonies 5,000.00</p>
-    <p>TOTAL PROGRAM COST Php {{ $transaction->program->total_price }}</p>
-    <p>Less: Total Payments made as of to date {{ $transaction->transactionDetails->sum('total_payment_made') }}</p>
     <center>
-        <p>TOTAL ACCOUNT BALANCE {{ $transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made') }}</p>
-        <p>If you have any questions/queries please contact us at:</p>
-        <p>Smart: +63930-909-8564</p>
-        <p>Globe: +63916-331-8962</p>
-        <p>Email: jameslouiebaldoza@gmail.com</p>
+        <div style="margin-top: 5px">
+            <p>If you have any questions/queries please contact us at:</p>
+            <p>Smart: +63930-909-8564</p>
+            <p>Globe: +63916-331-8962</p>
+            <p>Email: jameslouiebaldoza@gmail.com</p>
+        </div>
     </center>
+    <div class="container" style="margin: 10px 0 0 90px; ">
+        <div class="column">
+            <p style="margin-bottom: 40px;">Prepared By:</p>
+            <p style="font-weight: bold">JAMES LOUIE P. BALDOZA, MPA</p>
+            <p style="margin-left: 20px;">Program/Accounting Coordinator</p>
+        </div>
+        <div class="column" style="margin-left: 30px;">
+            <p style="margin-bottom: 40px;">Noted By:</p>
+            <p style="font-weight: bold">DR HELARIO T. CAMINERO</p>
+            <p style="margin-left: 45px;">Executive Director</p>
+        </div>
+    </div>
 
     @if(!$loop->last)
         <div class="page-break"></div>
