@@ -123,9 +123,9 @@ if (!function_exists('sendGridEmail')) {
             'text/html',
             $data['content']
         );
-        $sendgrid = new SendGrid('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');
+        $sendGrid = new SendGrid(env('SEND_GRID_API_KEY'));
         try {
-            $response = $sendgrid->send($email);
+            $response = $sendGrid->send($email);
             logger([$response]);
         } catch (Exception $e) {
             logger('Caught exception: '.$e->getMessage()."\n");
