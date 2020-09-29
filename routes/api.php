@@ -26,6 +26,13 @@ use Illuminate\Support\Facades\Route;
 // Route::group(
 //     ['middleware' => 'cors'],
 //     function () {
+
+        Route::middleware('api')->group(function () {
+            Route::post('forgot-password', 'Auth\ForgotPasswordController@forgotPassword')
+                ->name('forgot-password');
+            Route::post('reset-password', 'Auth\ResetPasswordController@resetPassword')
+                    ->name('reset-password');
+        });
         Route::group(
             ['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'],
             function () {
