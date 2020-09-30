@@ -51,8 +51,8 @@ class TransactionDetail extends Model
 
     public function getTotalPaymentMadeAttribute()
     {
-        return number_format($this->payments->sum('food_fee')
-            + $this->payments->sum('registration_fee')
-            + $this->payments->sum('session_cost'), 2);
+        return number_format($this->payments->sum('food_fee') ?? 0
+            + $this->payments->sum('registration_fee') ?? 0
+            + $this->payments->sum('session_cost') ?? 0, 2);
     }
 }
