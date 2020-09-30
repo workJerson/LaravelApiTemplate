@@ -130,10 +130,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $request->validated();
-        $user = request()->user();
         try {
             DB::beginTransaction();
             $user->update($request->all());
