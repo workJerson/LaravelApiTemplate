@@ -36,23 +36,27 @@ class TransactionDetail extends Model
 
     public function getTotalFoodFeeAttribute()
     {
-        return number_format($this->payments->sum('food_fee'), 2);
+        return $this->payments->sum('food_fee');
     }
 
     public function getTotalRegistrationFeeAttribute()
     {
-        return number_format($this->payments->sum('registration_fee'), 2);
+        return $this->payments->sum('registration_fee');
     }
 
     public function getTotalSessionCostAttribute()
     {
-        return number_format($this->payments->sum('session_cost'), 2);
+        return $this->payments->sum('session_cost');
     }
 
     public function getTotalPaymentMadeAttribute()
     {
-        return number_format($this->payments->sum('food_fee') ?? 0
-            + $this->payments->sum('registration_fee') ?? 0
-            + $this->payments->sum('session_cost') ?? 0, 2);
+        $totalFoodFee = $this->total_food_fee;
+        $totalRegistrationFee = $this->total_registration_fee;
+        $totalSessionCost = $this->total_session_cost;
+
+        $total = $totalFoodFee + $totalRegistrationFee + $totalSessionCost;
+
+        return $total;
     }
 }
