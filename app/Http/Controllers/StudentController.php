@@ -16,7 +16,7 @@ class StudentController extends Controller
     public function index(ResourceFilters $filters, Student $student)
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
-            $students = $student->with(['user', 'user.userDetail'])->filter($filters);
+            $students = $student->with(['user', 'user.userDetail', 'school', 'course'])->filter($filters);
 
             return $this->paginateOrGet($students);
         });
