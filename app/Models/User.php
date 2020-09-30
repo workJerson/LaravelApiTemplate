@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Password;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements CanResetPasswordClass
@@ -71,6 +72,14 @@ class User extends Authenticatable implements CanResetPasswordClass
     {
         $this->login_attempts = 0;
         $this->save();
+    }
+
+    public function sendPasswordResetNotification($token, $spielCode = null)
+    {
+        $params = http_build_query([
+            'token' => Password::getRepository()->create($this),
+            'email' => $this->attributes['email'],
+        ]);
     }
 
     /**

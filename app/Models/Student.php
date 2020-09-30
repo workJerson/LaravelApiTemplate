@@ -30,6 +30,19 @@ class Student extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'student_number',
+            'position',
+            'school_name',
+            'course_name',
+            'user_email',
+            'user_userDetail_first_name',
+            'user_userDetail_last_name',
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -4,6 +4,49 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+if (!function_exists('splitRelationshipsAndField')) {
+    /**
+     * Splits the underscore separated relationships with actual field name.
+     *
+     * @param string $string
+     * @param mixed  $model
+     *
+     * @return array
+     */
+    function splitRelationshipsAndField($string, $model)
+    {
+        $fieldName = '';
+        $relationships = [];
+        $leftIndex = 0;
+        $rightIndex = 0;
+        $lastRightIndex = 0;
+
+        while (!$fieldName) {
+            $rightIndex = strpos($string, '_', $lastRightIndex);
+
+            if ($rightIndex === false) {
+                $fieldName = substr($string, $leftIndex);
+                break;
+            }
+
+            $substr = substr($string, $leftIndex, $rightIndex - $leftIndex);
+            $lastRightIndex = $rightIndex + 1;
+
+            if (method_exists($model, $substr)) {
+                $relationships[] = $substr;
+                $model = $model->$substr()->getModel();
+                $leftIndex = $lastRightIndex;
+            }
+        }
+        logger($relationships);
+
+        return [
+            'relationship' => implode('.', $relationships),
+            'fieldName' => $fieldName,
+        ];
+    }
+}
+
 if (!function_exists('uploadPublicFiles')) {
     function uploadPublicFiles($request)
     {

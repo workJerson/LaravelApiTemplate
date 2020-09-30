@@ -23,8 +23,8 @@ class Coordinator extends Model
             'hub_id',
             'status',
             'user_email',
-            'user_user_details_full_name',
-            'student_student_number',
+            'user_userDetail_first_name',
+            'user_userDetail_last_name',
             'hub_name',
         ];
     }
