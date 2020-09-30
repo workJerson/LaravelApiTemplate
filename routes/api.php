@@ -36,7 +36,6 @@ use Illuminate\Support\Facades\Route;
         Route::group(
             ['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'],
             function () {
-                Route::post('pdf', 'TransactionController@generateSoa');
                 Route::post('login', 'AuthController@login');
             }
         );
@@ -53,6 +52,7 @@ use Illuminate\Support\Facades\Route;
                 Route::resource('student', StudentController::class, ['except' => ['create', 'edit']]);
                 Route::resource('user', UserController::class, ['except' => ['create', 'edit']]);
                 Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
+                Route::post('transaction/soa', 'App\Http\Controllers\TransactionController@generateSoa');
                 Route::get('dashboard', DashboardController::class)->name('dashboard');
             }
         );
