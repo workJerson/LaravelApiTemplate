@@ -80,6 +80,13 @@ class User extends Authenticatable implements CanResetPasswordClass
             'token' => Password::getRepository()->create($this),
             'email' => $this->attributes['email'],
         ]);
+        $url = env('WEB_URL')."/auth/reset-password?$params";
+        sendGridEmail([
+            'subject' => 'Welcome to PCL Legislative Academy',
+            'recipient' => $this->email,
+            'recipient_name' => $this->userDetail->full_name,
+            'content' => 'Welcome to PCL Legislative Academy. You can set your new password in this link <a href="'.$url.'"> Click here</a>',
+        ]);
     }
 
     /**

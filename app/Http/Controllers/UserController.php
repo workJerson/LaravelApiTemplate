@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
@@ -86,13 +87,24 @@ class UserController extends Controller
                     break;
             }
             $userObject->save();
+
+            // Send Email
+            $params = http_build_query([
+                'token' => Password::getRepository()->create($userObject),
+                'email' => $userObject->email,
+            ]);
+            $url = env('WEB_URL')."/auth/reset-password?$params";
+            sendGridEmail([
+                'subject' => 'Welcome to PCL Legislative Academy',
+                'recipient' => $userObject->email,
+                'recipient_name' => $userDetail->full_name,
+                'content' => 'Welcome to PCL Legislative Academy. You can set your new password in this link <a href="'.$url.'"> Click here</a>',
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th);
         }
-
-        // Send Email
 
         return response($userObject, 201);
     }
