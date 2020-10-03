@@ -143,6 +143,8 @@ class TransactionController extends Controller
             if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
                 $transactionObject = $transaction->create($request->all());
 
+                $transactionObject->prefixed_id = $transactionObject->id;
+
                 foreach ($this->details as $key => $detail) {
                     $transactionObject
                     ->transactionDetails()
