@@ -140,23 +140,23 @@ class TransactionController extends Controller
         $request->validated();
         try {
             DB::beginTransaction();
-            if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
-                $transactionObject = $transaction->create($request->all());
+            // if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
+            $transactionObject = $transaction->create($request->all());
 
-                $transactionObject->prefixed_id = $transactionObject->id;
-                $transactionObject->save();
-                foreach ($this->details as $key => $detail) {
-                    $transactionObject
+            $transactionObject->prefixed_id = $transactionObject->id;
+            $transactionObject->save();
+            foreach ($this->details as $key => $detail) {
+                $transactionObject
                     ->transactionDetails()
                     ->create([
                         'type' => $detail['type'],
                         'transaction_date' => $detail['date'].$now->year,
                         'event_status' => 1,
                     ]);
-                }
-            } else {
-                return response()->json(['message' => 'Student has an ongoing transaction'], 400);
             }
+            // } else {
+            //     return response()->json(['message' => 'Student has an ongoing transaction'], 400);
+            // }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
