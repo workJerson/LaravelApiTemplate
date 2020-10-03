@@ -114,7 +114,7 @@ class TransactionController extends Controller
             } else {
                 $transactions = $transaction->filter($filters);
             }
-            $transactions->with(['hub', 'program', 'student']);
+            $transactions->with(['hub', 'program', 'student.user.userDetail']);
 
             return $this->paginateOrGet($transactions);
         });
