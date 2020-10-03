@@ -144,7 +144,7 @@ class TransactionController extends Controller
                 $transactionObject = $transaction->create($request->all());
 
                 $transactionObject->prefixed_id = $transactionObject->id;
-
+                $transactionObject->save();
                 foreach ($this->details as $key => $detail) {
                     $transactionObject
                     ->transactionDetails()
