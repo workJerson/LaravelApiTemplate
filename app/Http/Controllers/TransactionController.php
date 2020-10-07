@@ -64,6 +64,11 @@ class TransactionController extends Controller
     {
     }
 
+    public function getMonthsFilter()
+    {
+        return response(['months' => $this->details]);
+    }
+
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
         // sendGridEmail([
@@ -88,8 +93,9 @@ class TransactionController extends Controller
         ])->get();
 
         $pdf = PDF::loadView('pdf.soa', $transactions);
+        $fileName = Carbon::now()->format('Ymdhis');
 
-        return $pdf->download('invoice.pdf');
+        return $pdf->download("SOA$fileName.pdf");
     }
 
     /**
@@ -100,20 +106,24 @@ class TransactionController extends Controller
     public function index(ResourceFilters $filters, Transaction $transaction)
     {
         return $this->generateCachedResponse(function () use ($filters, $transaction) {
-            if (request()->user()->account_type == 1) {
+            if (request()->user()->account_type == 1 || request()->user()->account_type == 2) {
                 if (request()->user()->coordinator != null) {
-                    $actor = 'coordinator';
+                    $transactions = $transaction
+                        ->whereHas('hub', function ($query) {
+                            return $query->where('hub_id', request()->user()->coordinator->hub_id);
+                        })
+                        ->filter($filters);
                 } else {
-                    $actor = 'student';
+                    $transactions = request()
+                        ->user()
+                        ->student()
+                        ->transactions()
+                        ->filter($filters);
                 }
-                $transactions = request()
-                    ->user()
-                    ->{$actor}
-                    ->transactions()
-                    ->filter($filters);
             } else {
                 $transactions = $transaction->filter($filters);
             }
+            $transactions->with(['hub', 'program', 'student.user.userDetail']);
 
             return $this->paginateOrGet($transactions);
         });
@@ -139,21 +149,23 @@ class TransactionController extends Controller
         $request->validated();
         try {
             DB::beginTransaction();
-            if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
-                $transactionObject = $transaction->create($request->all());
+            // if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
+            $transactionObject = $transaction->create($request->all());
 
-                foreach ($this->details as $key => $detail) {
-                    $transactionObject
+            $transactionObject->prefixed_id = $transactionObject->id;
+            $transactionObject->save();
+            foreach ($this->details as $key => $detail) {
+                $transactionObject
                     ->transactionDetails()
                     ->create([
                         'type' => $detail['type'],
                         'transaction_date' => $detail['date'].$now->year,
                         'event_status' => 1,
                     ]);
-                }
-            } else {
-                return response()->json(['message' => 'Student has an ongoing transaction'], 400);
             }
+            // } else {
+            //     return response()->json(['message' => 'Student has an ongoing transaction'], 400);
+            // }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -174,6 +186,9 @@ class TransactionController extends Controller
             'hub',
             'program',
             'student',
+            'student.school',
+            'student.course',
+            'student.user.userDetail',
             'transactionDetails',
             'transactionDetails.payments',
         ]);

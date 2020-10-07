@@ -11,6 +11,8 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionDetailController;
+use App\Http\Controllers\TransactionDetailPaymentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,7 +56,10 @@ use Illuminate\Support\Facades\Route;
                 Route::resource('student', StudentController::class, ['except' => ['create', 'edit']]);
                 Route::resource('user', UserController::class, ['except' => ['create', 'edit']]);
                 Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
+                Route::resource('transaction-detail', TransactionDetailController::class, ['except' => ['create', 'edit']]);
+                Route::resource('transaction-detail-payment', TransactionDetailPaymentController::class, ['except' => ['create', 'edit']]);
                 Route::post('transaction/soa', 'App\Http\Controllers\TransactionController@generateSoa');
+                Route::get('transaction-filters', 'App\Http\Controllers\TransactionController@getMonthsFilter');
                 Route::get('dashboard', DashboardController::class)->name('dashboard');
             }
         );

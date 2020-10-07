@@ -11,7 +11,10 @@ class Transaction extends Model
 {
     use HasFactory;
     use Filterable;
-
+    /**
+     *  event_status 1 = In Progress
+     *  event_status 2 = Done.
+     */
     protected $fillable = [
         'prefixed_id',
         'program_id',
@@ -23,6 +26,7 @@ class Transaction extends Model
         'status',
         'event_status',
     ];
+    protected $appends = ['total_payment_made', 'total_remaining_balance'];
 
     public function searchable()
     {
@@ -62,5 +66,15 @@ class Transaction extends Model
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function getTotalPaymentMadeAttribute()
+    {
+        return $this->transactionDetails->sum('total_payment_made');
+    }
+
+    public function getTotalRemainingBalanceAttribute()
+    {
+        return $this->program->total_price - $this->transactionDetails->sum('total_payment_made');
     }
 }
