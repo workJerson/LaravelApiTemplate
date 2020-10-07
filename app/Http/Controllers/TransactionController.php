@@ -93,8 +93,9 @@ class TransactionController extends Controller
         ])->get();
 
         $pdf = PDF::loadView('pdf.soa', $transactions);
+        $fileName = Carbon::now()->format('Ymdhis');
 
-        return $pdf->download('invoice.pdf');
+        return $pdf->download("SOA$fileName.pdf");
     }
 
     /**
