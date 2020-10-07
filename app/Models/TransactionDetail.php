@@ -11,6 +11,11 @@ class TransactionDetail extends Model
     use HasFactory;
     use Filterable;
 
+    /**
+     * event_status 1 = New
+     * event_status 2 = For Payment Validation
+     * event_status 3 = Paid.
+     */
     protected $fillable = [
         'type',
         'transaction_date',
@@ -18,6 +23,19 @@ class TransactionDetail extends Model
         'transaction_id',
         'event_status',
     ];
+
+    public function searchable()
+    {
+        return [
+            'transaction_hub_id',
+            'status',
+            'event_status',
+            'transaction_program_name',
+            'transaction_student_student_number',
+            'transaction_hub_name',
+            'transaction_date',
+        ];
+    }
 
     public function transaction()
     {

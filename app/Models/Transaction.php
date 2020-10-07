@@ -11,7 +11,10 @@ class Transaction extends Model
 {
     use HasFactory;
     use Filterable;
-
+    /**
+     *  event_status 1 = In Progress
+     *  event_status 2 = Done.
+     */
     protected $fillable = [
         'prefixed_id',
         'program_id',

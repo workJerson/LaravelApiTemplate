@@ -100,7 +100,7 @@ class TransactionController extends Controller
     public function index(ResourceFilters $filters, Transaction $transaction)
     {
         return $this->generateCachedResponse(function () use ($filters, $transaction) {
-            if (request()->user()->account_type == 1) {
+            if (request()->user()->account_type == 1 || request()->user()->account_type == 2) {
                 if (request()->user()->coordinator != null) {
                     $actor = 'coordinator';
                 } else {
