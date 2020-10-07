@@ -10,7 +10,7 @@ class UserDetail extends Model
 {
     use HasFactory;
     use Filterable;
-
+    protected $appends = ['full_name'];
     protected $fillable = [
         'first_name',
         'last_name',
