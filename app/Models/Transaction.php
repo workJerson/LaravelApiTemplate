@@ -70,11 +70,11 @@ class Transaction extends Model
 
     public function getTotalPaymentMadeAttribute()
     {
-        return number_format($this->transactionDetails->sum('total_payment_made'), 2);
+        return $this->transactionDetails->sum('total_payment_made');
     }
 
     public function getTotalRemainingBalanceAttribute()
     {
-        return number_format($this->program->total_price - $this->transactionDetails->sum('total_payment_made'), 2);
+        return $this->program->total_price - $this->transactionDetails->sum('total_payment_made');
     }
 }
