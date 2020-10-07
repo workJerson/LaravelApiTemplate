@@ -185,6 +185,9 @@ class TransactionController extends Controller
             'hub',
             'program',
             'student',
+            'student.school',
+            'student.course',
+            'student.user.userDetail',
             'transactionDetails',
             'transactionDetails.payments',
         ]);

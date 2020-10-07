@@ -23,6 +23,7 @@ class TransactionDetail extends Model
         'transaction_id',
         'event_status',
     ];
+    protected $appends = ['totals'];
 
     public function searchable()
     {
@@ -65,6 +66,17 @@ class TransactionDetail extends Model
     public function getTotalSessionCostAttribute()
     {
         return $this->payments->sum('session_cost');
+    }
+
+    public function getTotalsAttribute()
+    {
+        return [
+            'all_official_receipt' => $this->all_official_receipt,
+            'total_food_fee' => $this->total_food_fee,
+            'total_registration_fee' => $this->total_registration_fee,
+            'total_session_cost' => $this->total_session_cost,
+            'total_payment_made' => $this->total_payment_made,
+        ];
     }
 
     public function getTotalPaymentMadeAttribute()
