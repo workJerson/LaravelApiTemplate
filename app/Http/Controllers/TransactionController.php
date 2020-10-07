@@ -107,15 +107,18 @@ class TransactionController extends Controller
         return $this->generateCachedResponse(function () use ($filters, $transaction) {
             if (request()->user()->account_type == 1 || request()->user()->account_type == 2) {
                 if (request()->user()->coordinator != null) {
-                    $actor = 'coordinator';
+                    $transactions = $transaction
+                        ->whereHas('hub', function ($query) {
+                            return $query->where('hub_id', request()->user()->coordinator->hub_id);
+                        })
+                        ->filter($filters);
                 } else {
-                    $actor = 'student';
+                    $transactions = request()
+                        ->user()
+                        ->student()
+                        ->transactions()
+                        ->filter($filters);
                 }
-                $transactions = request()
-                    ->user()
-                    ->{$actor}
-                    ->transactions()
-                    ->filter($filters);
             } else {
                 $transactions = $transaction->filter($filters);
             }
