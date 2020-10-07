@@ -26,6 +26,7 @@ class Transaction extends Model
         'status',
         'event_status',
     ];
+    protected $appends = ['total_payment_made', 'total_remaining_balance'];
 
     public function searchable()
     {
@@ -65,5 +66,15 @@ class Transaction extends Model
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function getTotalPaymentMadeAttribute()
+    {
+        return number_format($this->transactionDetails->sum('total_payment_made'), 2);
+    }
+
+    public function getTotalRemainingBalanceAttribute()
+    {
+        return number_format($this->program->total_price - $this->transactionDetails->sum('total_payment_made'), 2);
     }
 }
