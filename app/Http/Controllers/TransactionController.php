@@ -64,6 +64,11 @@ class TransactionController extends Controller
     {
     }
 
+    public function getMonthsFilter()
+    {
+        return response(['months' => $this->details]);
+    }
+
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
         // sendGridEmail([

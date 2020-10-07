@@ -57,6 +57,7 @@ use Illuminate\Support\Facades\Route;
                 Route::resource('transaction', TransactionController::class, ['except' => ['create', 'edit']]);
                 Route::resource('transaction-detail', TransactionDetailController::class, ['except' => ['create', 'edit']]);
                 Route::post('transaction/soa', 'App\Http\Controllers\TransactionController@generateSoa');
+                Route::get('transaction-filters', 'App\Http\Controllers\TransactionController@getMonthsFilter');
                 Route::get('dashboard', DashboardController::class)->name('dashboard');
             }
         );
