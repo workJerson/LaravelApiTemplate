@@ -33,9 +33,19 @@ class CreateTransactionDetailPaymentRequest extends FormRequest
                 'sometimes',
                 'string',
             ],
-            'payment_made' => [
+            'session_cost' => [
                 'numeric',
-                'required',
+                'sometimes',
+                'between:0.000001,999999999999.999999',
+            ],
+            'registration_fee' => [
+                'numeric',
+                'sometimes',
+                'between:0.000001,999999999999.999999',
+            ],
+            'food_fee' => [
+                'numeric',
+                'sometimes',
                 'between:0.000001,999999999999.999999',
             ],
         ];
