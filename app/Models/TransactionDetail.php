@@ -30,11 +30,15 @@ class TransactionDetail extends Model
         return [
             'transaction_hub_id',
             'status',
+            'type',
+            'transaction_date',
             'event_status',
             'transaction_program_name',
-            'transaction_student_student_number',
+            'transaction_student_user_userDetail_first_name',
+            'transaction_student_user_userDetail_last_name',
             'transaction_hub_name',
             'transaction_date',
+            'payments_official_receipt_number',
         ];
     }
 
