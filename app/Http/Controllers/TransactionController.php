@@ -115,10 +115,11 @@ class TransactionController extends Controller
                         })
                         ->filter($filters);
                 } else {
-                    $transactions = request()
-                        ->user()
-                        ->student()
-                        ->transactions()
+                    $studentId = request()->user()->student->id;
+                    $transactions = $transaction
+                        ->whereHas('student', function ($query) use ($studentId) {
+                            return $query->where('student_id', $studentId);
+                        })
                         ->filter($filters);
                 }
             } else {
