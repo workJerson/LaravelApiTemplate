@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Filters\ResourceFilters;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
 use App\Http\Requests\Transaction\GenerateSoaRequest;
+use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Models\Student;
 use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -212,7 +213,7 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateTransactionRequest $request, Transaction $transaction)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
         $transaction->update($request->validated());
 
