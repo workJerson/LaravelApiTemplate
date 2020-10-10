@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (env('APP_ENV') !== 'local' && env('APP_ENV') !== 'dev') {
+        if (env('APP_ENV') !== 'local' || env('APP_ENV') !== 'dev') {
             $this->call(HubLocalSeeder::class);
             $this->call(ProgramLocalSeeder::class);
             $this->call(CourseLocalSeeder::class);
