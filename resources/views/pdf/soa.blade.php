@@ -106,7 +106,6 @@
             <th>Transactions</th>
             <th>Transaction Date</th>
             <th>OR No.</th>
-            <th>Registration Fee</th>
             <th>Session Cost</th>
             <th>Payment Made</th>
         </tr>
@@ -115,8 +114,7 @@
             <td class='td-left'>{{ $transactionDetail->type }}</td>
             <td class='td-left'>{{ $transactionDetail->transaction_date }}</td>
             <td>{{ $transactionDetail->all_official_receipt }}</td>
-            <td>@convert($transactionDetail->total_registration_fee)</td>
-            <td>@convert($transactionDetail->total_session_cost)</td>
+            <td>@convert($transactionDetail->session_cost)</td>
             <td>@convert($transactionDetail->total_payment_made)</td>
         </tr>
         @endforeach
