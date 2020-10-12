@@ -123,7 +123,6 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
             <td>@convert($transaction->transactionDetails->sum('total_payment_made'))</td>
         </tr>
     </table>
