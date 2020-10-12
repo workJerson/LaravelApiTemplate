@@ -162,6 +162,7 @@ class TransactionController extends Controller
                         'type' => $detail['type'],
                         'transaction_date' => $detail['date'].$now->year,
                         'event_status' => 1,
+                        'session_cost' => (float) $transactionObject->program->total_price / 11,
                     ]);
             }
             // } else {
