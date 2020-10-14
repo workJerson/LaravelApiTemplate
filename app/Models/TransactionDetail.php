@@ -22,6 +22,7 @@ class TransactionDetail extends Model
         'status',
         'transaction_id',
         'event_status',
+        'session_cost',
     ];
     protected $appends = ['totals'];
 
@@ -57,40 +58,16 @@ class TransactionDetail extends Model
         return $this->payments->pluck('official_receipt_number')->implode(',');
     }
 
-    public function getTotalFoodFeeAttribute()
-    {
-        return $this->payments->sum('food_fee');
-    }
-
-    public function getTotalRegistrationFeeAttribute()
-    {
-        return $this->payments->sum('registration_fee');
-    }
-
-    public function getTotalSessionCostAttribute()
-    {
-        return $this->payments->sum('session_cost');
-    }
-
     public function getTotalsAttribute()
     {
         return [
             'all_official_receipt' => $this->all_official_receipt,
-            'total_food_fee' => $this->total_food_fee,
-            'total_registration_fee' => $this->total_registration_fee,
-            'total_session_cost' => $this->total_session_cost,
             'total_payment_made' => $this->total_payment_made,
         ];
     }
 
     public function getTotalPaymentMadeAttribute()
     {
-        $totalFoodFee = $this->total_food_fee;
-        $totalRegistrationFee = $this->total_registration_fee;
-        $totalSessionCost = $this->total_session_cost;
-
-        $total = $totalFoodFee + $totalRegistrationFee + $totalSessionCost;
-
-        return $total;
+        return $this->payments->sum('payment_made');
     }
 }

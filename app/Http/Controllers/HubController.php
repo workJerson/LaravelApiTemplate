@@ -16,7 +16,11 @@ class HubController extends Controller
     public function index(ResourceFilters $filters, Hub $hub)
     {
         return $this->generateCachedResponse(function () use ($filters, $hub) {
-            $hubs = $hub->filter($filters);
+            if (request()->user()->account_type == 2) {
+                $hubs = request()->user()->coordinator->hub;
+            } else {
+                $hubs = $hub->filter($filters);
+            }
 
             return $this->paginateOrGet($hubs);
         });
