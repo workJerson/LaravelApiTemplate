@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Program;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class ProgramLocalSeeder extends Seeder
 {
@@ -14,31 +15,32 @@ class ProgramLocalSeeder extends Seeder
      */
     public function run()
     {
-        if (!Program::first()) {
-            $data = [
-                [
-                    'name' => 'Baccalaureate',
-                    'description' => 'Baccalaureate Program',
-                    'total_price' => 75000.00,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                    'name' => 'Masters',
-                    'description' => 'Masters Program',
-                    'total_price' => 75000.00,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                    'name' => 'Doctoral',
-                    'description' => 'Doctoral Program',
-                    'total_price' => 75000.00,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-            ];
-            Program::insert($data);
+        $programs = [
+            [
+                'id' => 1,
+                'name' => 'Baccalaureate',
+                'description' => 'Baccalaureate Program',
+                'total_price' => 75000.00,
+            ],
+            [
+                'id' => 2,
+                'name' => 'Masters',
+                'description' => 'Masters Program',
+                'total_price' => 75000.00,
+            ],
+            [
+                'id' => 3,
+                'name' => 'Doctoral',
+                'description' => 'Doctoral Program',
+                'total_price' => 75000.00,
+            ],
+        ];
+
+        foreach ($programs as $program) {
+            $programObject = Program::firstOrCreate(['id' => $program['id']], $program);
+            if (!$programObject->wasRecentlyCreated) {
+                $programObject->update(Arr::only($program, ['name', 'description', 'total_price']));
+            }
         }
     }
 }
