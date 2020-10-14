@@ -17,7 +17,9 @@ class HubController extends Controller
     {
         return $this->generateCachedResponse(function () use ($filters, $hub) {
             if (request()->user()->account_type == 2) {
-                $hubs = request()->user()->coordinator->hub;
+                $hubs = $hub
+                    ->where('id', request()->user()->coordinator->hub_id)
+                    ->filter($filters);
             } else {
                 $hubs = $hub->filter($filters);
             }
