@@ -36,7 +36,10 @@ class Transaction extends Model
             'event_status',
             'program_name',
             'student_student_number',
+            'student_user_userDetail_first_name',
+            'student_user_userDetail_last_name',
             'hub_name',
+            'prefixed_id',
         ];
     }
 

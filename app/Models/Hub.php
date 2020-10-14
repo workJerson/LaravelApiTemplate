@@ -17,6 +17,15 @@ class Hub extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'status',
+            'description',
+        ];
+    }
+
     public function coordinators()
     {
         return $this->hasMany(Coordinator::class);

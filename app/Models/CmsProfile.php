@@ -17,6 +17,16 @@ class CmsProfile extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'group_name',
+            'user_userDetail_first_name',
+            'user_userDetail_last_name',
+            'status',
+        ];
+    }
+
     public function group()
     {
         return $this->belongsTo(Group::class);
