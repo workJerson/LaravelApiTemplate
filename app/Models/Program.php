@@ -18,6 +18,16 @@ class Program extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'status',
+            'description',
+            'total_price',
+        ];
+    }
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);

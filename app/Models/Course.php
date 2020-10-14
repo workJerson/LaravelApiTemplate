@@ -17,6 +17,15 @@ class Course extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'description',
+            'status',
+        ];
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class);
