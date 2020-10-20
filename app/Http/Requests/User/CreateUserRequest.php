@@ -38,7 +38,7 @@ class CreateUserRequest extends FormRequest
                 'string',
             ],
             'middle_name' => [
-                'sometimes',
+                'nullable',
                 'string',
             ],
             'address' => [
