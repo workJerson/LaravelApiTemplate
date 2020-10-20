@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ResourceFilters;
+use App\Http\Requests\Transaction\CreateTransactionDetailRequest;
 use App\Http\Requests\Transaction\UpdateTransactionDetailRequest;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
@@ -58,8 +59,11 @@ class TransactionDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, TransactionDetail $transactionDetail)
+    public function store(CreateTransactionDetailRequest $request, TransactionDetail $transactionDetail)
     {
+        $object = $transactionDetail->create($request->validated());
+
+        return response($object, 201);
     }
 
     /**
