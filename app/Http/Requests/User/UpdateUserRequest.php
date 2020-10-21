@@ -33,7 +33,7 @@ class UpdateUserRequest extends FormRequest
                 'string',
             ],
             'middle_name' => [
-                'sometimes',
+                'nullable',
                 'string',
             ],
             'address' => [
