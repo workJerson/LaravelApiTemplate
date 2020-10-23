@@ -15,6 +15,7 @@ class Hub extends Model
         'name',
         'description',
         'status',
+        'school_id',
     ];
 
     public function searchable()

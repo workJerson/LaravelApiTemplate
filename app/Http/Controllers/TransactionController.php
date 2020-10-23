@@ -72,14 +72,6 @@ class TransactionController extends Controller
 
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
-        // sendGridEmail([
-        //     'subject' => 'Welcome to Rightfield Printing and Supplies Ltd.',
-        //     'recipient' => 'jersonyanihh@gmail.com',
-        //     'recipient_name' => 'jerson',
-        //     'content' => 'Welcome to Rightfield Printing and Supplies Ltd. you can now order and use your account. You can login in this link <a href="http://ecom-project-2.s3-website-ap-southeast-1.amazonaws.com/#/"> Click here</a>',
-        // ]);
-
-        // return response('ok');
         $request->validated();
         $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
             'transactionDetails',
@@ -150,13 +142,13 @@ class TransactionController extends Controller
         $request->validated();
         try {
             DB::beginTransaction();
-            // if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
-            $transactionObject = $transaction->create($request->all());
+            if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
+                $transactionObject = $transaction->create($request->all());
 
-            $transactionObject->prefixed_id = $transactionObject->id;
-            $transactionObject->save();
-            foreach ($this->details as $key => $detail) {
-                $transactionObject
+                $transactionObject->prefixed_id = $transactionObject->id;
+                $transactionObject->save();
+                foreach ($this->details as $key => $detail) {
+                    $transactionObject
                     ->transactionDetails()
                     ->create([
                         'type' => $detail['type'],
@@ -164,10 +156,10 @@ class TransactionController extends Controller
                         'event_status' => 1,
                         'session_cost' => (float) $transactionObject->program->total_price / 11,
                     ]);
+                }
+            } else {
+                return response()->json(['message' => 'Student has an ongoing transaction'], 400);
             }
-            // } else {
-            //     return response()->json(['message' => 'Student has an ongoing transaction'], 400);
-            // }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -185,10 +177,10 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $transactionObject = $transaction->load([
-            'hub',
             'program',
             'student',
             'student.school',
+            'student.hub',
             'student.course',
             'student.user.userDetail',
             'transactionDetails',
