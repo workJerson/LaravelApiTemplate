@@ -82,7 +82,7 @@ class TransactionController extends Controller
             'student.user.userDetail',
             'student.school',
             'student.course',
-            'school.hub',
+            'student.hub.school',
         ])->get();
         $pdf = PDF::loadView('pdf.soa', $transactions);
         $fileName = Carbon::now()->format('Ymdhis');
