@@ -15,6 +15,7 @@ class Hub extends Model
         'name',
         'description',
         'status',
+        'school_id',
     ];
 
     public function searchable()
@@ -23,6 +24,7 @@ class Hub extends Model
             'name',
             'status',
             'description',
+            'school_name'
         ];
     }
 
@@ -34,5 +36,10 @@ class Hub extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }

@@ -6,33 +6,22 @@ use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model
+class FileDirectory extends Model
 {
     use HasFactory;
     use Filterable;
 
     protected $fillable = [
-        'name',
-        'address',
+        'path',
+        'description',
         'status',
     ];
 
     public function searchable()
     {
         return [
-            'name',
-            'address',
-            'status',
+            'path',
+            'description',
         ];
-    }
-
-    public function students()
-    {
-        return $this->hasMany(Student::class);
-    }
-
-    public function hubs()
-    {
-        return $this->hasMany(Hub::class);
     }
 }

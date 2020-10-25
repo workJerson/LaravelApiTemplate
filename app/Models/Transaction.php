@@ -21,7 +21,6 @@ class Transaction extends Model
         'total_actual_amount',
         'total_amount_paid',
         'program_id',
-        'hub_id',
         'student_id',
         'status',
         'event_status',
@@ -31,14 +30,13 @@ class Transaction extends Model
     public function searchable()
     {
         return [
-            'hub_id',
             'status',
             'event_status',
             'program_name',
             'student_student_number',
             'student_user_userDetail_first_name',
             'student_user_userDetail_last_name',
-            'hub_name',
+            'student_hub_name',
             'prefixed_id',
         ];
     }
@@ -49,11 +47,6 @@ class Transaction extends Model
         $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
 
         $this->attributes['prefixed_id'] = "TRANS$year$paddedId";
-    }
-
-    public function hub()
-    {
-        return $this->belongsTo(Hub::class);
     }
 
     public function program()

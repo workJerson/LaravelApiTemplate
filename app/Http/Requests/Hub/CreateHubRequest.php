@@ -24,6 +24,11 @@ class CreateHubRequest extends FormRequest
     public function rules()
     {
         return [
+            'school_id' => [
+                'required',
+                'numeric',
+                'exists:schools,id',
+            ],
             'name' => [
                 'required',
                 'string',

@@ -66,6 +66,11 @@ class TransactionDetail extends Model
         ];
     }
 
+    public function getTotalPaidPaymentsAttribute()
+    {
+        return $this->event_status <= 1 ? 0 : $this->payments->sum('payment_made');
+    }
+
     public function getTotalPaymentMadeAttribute()
     {
         return $this->payments->sum('payment_made');

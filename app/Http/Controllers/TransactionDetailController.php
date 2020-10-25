@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ResourceFilters;
+use App\Http\Requests\Transaction\CreateTransactionDetailRequest;
 use App\Http\Requests\Transaction\UpdateTransactionDetailRequest;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
@@ -24,12 +25,14 @@ class TransactionDetailController extends Controller
                         ->whereHas('transaction', function ($query) {
                             return $query->where('hub_id', request()->user()->coordinator->hub_id);
                         })
-                        ->filter($filters);
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 }
             } else {
                 $transactionDetails = $transactionDetail
                     ->where('event_status', 2)
-                    ->filter($filters);
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
             }
 
             $transactionDetails->with([
@@ -58,8 +61,11 @@ class TransactionDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, TransactionDetail $transactionDetail)
+    public function store(CreateTransactionDetailRequest $request, TransactionDetail $transactionDetail)
     {
+        $object = $transactionDetail->create($request->validated());
+
+        return response($object, 201);
     }
 
     /**
@@ -107,7 +113,7 @@ class TransactionDetailController extends Controller
      */
     public function destroy(TransactionDetail $transactionDetail)
     {
-        $transactionDetail->status = 0;
+        $transactionDetail->status = 2;
         $transactionDetail->save();
 
         return response(['message' => 'Deleted successfully']);

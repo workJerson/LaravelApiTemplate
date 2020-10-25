@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Transaction;
+namespace App\Http\Requests\File;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTransactionRequest extends FormRequest
+class CreateFileDirectoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,18 @@ class CreateTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'program_id' => [
+            'path' => [
                 'required',
-                'numeric',
-                'exists:programs,id',
+                'string',
             ],
-            'student_id' => [
+            'description' => [
                 'required',
-                'numeric',
-                'exists:students,id',
+                'string',
             ],
-            // 'start_month' => [
-            //     'required',
-            //     'string',
-            // ],
+            'status' => [
+                'sometimes',
+                'numeric',
+            ],
         ];
     }
 }

@@ -83,18 +83,18 @@
     <hr style= "border: 3px solid blue" >
     <center>
         <h1>Statement of Account</h1>
-        <p>{{ $transaction->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
+        <p>{{ $transaction->student->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
         <p style="font-style: italic">{{ $transaction->student->course->name}}</p>
     </center>
     <div style="width: 100%; padding: 0 60px;">
         <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>
         <div style="width: 100%; padding-left: 35px; margin-bottom: 15px;">
             <p>{{ $transaction->student->user->userDetail->address }}</p>
-            <p>{{ $transaction->hub->name }} Hub</p>
+            <p>{{ $transaction->student->hub->name }} Hub</p>
         </div>
         <p style="text-indent: 2em">Below is the current statement of your account. Your total amount due against the program cost is
             <span style="text-decoration:underline; font-weight:bold">
-                Php @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made'))
+                Php @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_paid_payments'))
             </span>
             , payable upon the indiciation session cost
         </p>
@@ -115,7 +115,7 @@
             <td class='td-left'>{{ $transactionDetail->transaction_date }}</td>
             <td>{{ $transactionDetail->all_official_receipt }}</td>
             <td>@convert($transactionDetail->session_cost)</td>
-            <td>@convert($transactionDetail->total_payment_made)</td>
+            <td>@convert($transactionDetail->total_paid_payments)</td>
         </tr>
         @endforeach
         <tr>
@@ -123,7 +123,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>@convert($transaction->transactionDetails->sum('total_payment_made'))</td>
+            <td>@convert($transaction->transactionDetails->sum('total_paid_payments'))</td>
         </tr>
     </table>
     <div class="container" style="margin: 10px 0 10px 90px;">
@@ -142,9 +142,9 @@
             <p>5,000.00</p>
             <hr class="hr-currency">
             <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span>  @convert($transaction->program->total_price)</p>
-            <p> @convert($transaction->transactionDetails->sum('total_payment_made'))</p>
+            <p> @convert($transaction->transactionDetails->sum('total_paid_payments'))</p>
             <br>
-            <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span> @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_payment_made'))</p>
+            <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span> @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_paid_payments'))</p>
             <hr class="hr-currency">
         </div>
     </div>

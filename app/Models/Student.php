@@ -16,7 +16,7 @@ class Student extends Model
         'student_number',
         'user_id',
         'course_id',
-        'school_id',
+        'hub_id',
         'position',
         'ccaps',
         'letter_of_intent',
@@ -61,6 +61,11 @@ class Student extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function hub()
+    {
+        return $this->belongsTo(Hub::class);
     }
 
     public function setStudentNumberAttribute($value)

@@ -19,11 +19,13 @@ class HubController extends Controller
             if (request()->user()->account_type == 2) {
                 $hubs = $hub
                     ->where('id', request()->user()->coordinator->hub_id)
-                    ->filter($filters);
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
             } else {
-                $hubs = $hub->filter($filters);
+                $hubs = $hub->filter($filters)
+                    ->where('status', '!=', 2);
             }
-
+            $hubs->with(['school']);
             return $this->paginateOrGet($hubs);
         });
     }
@@ -96,7 +98,7 @@ class HubController extends Controller
      */
     public function destroy(Hub $hub)
     {
-        $hub->status = 0;
+        $hub->status = 2;
         $hub->save();
 
         return response($hub);

@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class CreateTransactionRequest extends FormRequest
+class CreateTransactionDetailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class CreateTransactionRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,20 +25,24 @@ class CreateTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'program_id' => [
+            'transaction_id' => [
                 'required',
                 'numeric',
-                'exists:programs,id',
+                'exists:transactions,id',
             ],
-            'student_id' => [
+            'type' => [
                 'required',
-                'numeric',
-                'exists:students,id',
+                'string',
             ],
-            // 'start_month' => [
-            //     'required',
-            //     'string',
-            // ],
+            'transaction_date' => [
+                'required',
+                'string',
+            ],
+            'session_cost' => [
+                'numeric',
+                'required',
+                'between:0.000001,999999999999.999999',
+            ],
         ];
     }
 }

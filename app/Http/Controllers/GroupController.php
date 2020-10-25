@@ -16,7 +16,8 @@ class GroupController extends Controller
     public function index(ResourceFilters $filters, Group $group)
     {
         return $this->generateCachedResponse(function () use ($filters, $group) {
-            $groups = $group->filter($filters)->where('name', '!=', 'superadmin');
+            $groups = $group->filter($filters)->where('name', '!=', 'superadmin')
+            ->where('status', '!=', 2);
 
             return $this->paginateOrGet($groups);
         });
@@ -87,7 +88,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $group->status = 0;
+        $group->status = 2;
         $group->save();
 
         return response($group);
