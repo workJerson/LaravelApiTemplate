@@ -120,7 +120,7 @@ class TransactionController extends Controller
                     ->filter($filters)
                     ->where('status', '!=', 2);
             }
-            $transactions->with(['hub', 'program', 'student.user.userDetail']);
+            $transactions->with(['program', 'student.user.userDetail']);
 
             return $this->paginateOrGet($transactions);
         });
