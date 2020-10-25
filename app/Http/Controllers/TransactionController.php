@@ -76,13 +76,13 @@ class TransactionController extends Controller
         $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
             'transactionDetails',
             'transactionDetails.payments',
-            'hub',
             'program',
             'student',
             'student.user',
             'student.user.userDetail',
             'student.school',
             'student.course',
+            'school.hub',
         ])->get();
         $pdf = PDF::loadView('pdf.soa', $transactions);
         $fileName = Carbon::now()->format('Ymdhis');

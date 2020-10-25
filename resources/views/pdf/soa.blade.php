@@ -83,14 +83,14 @@
     <hr style= "border: 3px solid blue" >
     <center>
         <h1>Statement of Account</h1>
-        <p>{{ $transaction->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
+        <p>{{ $transaction->school->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
         <p style="font-style: italic">{{ $transaction->student->course->name}}</p>
     </center>
     <div style="width: 100%; padding: 0 60px;">
         <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>
         <div style="width: 100%; padding-left: 35px; margin-bottom: 15px;">
             <p>{{ $transaction->student->user->userDetail->address }}</p>
-            <p>{{ $transaction->hub->name }} Hub</p>
+            <p>{{ $transaction->school->hub->name }} Hub</p>
         </div>
         <p style="text-indent: 2em">Below is the current statement of your account. Your total amount due against the program cost is
             <span style="text-decoration:underline; font-weight:bold">
