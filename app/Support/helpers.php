@@ -4,6 +4,26 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+if (!function_exists('hasRelationship')) {
+    /**
+     * Check if model has existing association on any given relationship.
+     *
+     * @param mixed $model
+     * @param array $relationships
+     *
+     * @return bool
+     */
+    function hasRelationship($model, $relationships)
+    {
+        foreach ($relationships as $relationship) {
+            if ($model->$relationship()->exists()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
 if (!function_exists('splitRelationshipsAndField')) {
     /**
      * Splits the underscore separated relationships with actual field name.

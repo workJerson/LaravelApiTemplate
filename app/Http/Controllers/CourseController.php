@@ -16,7 +16,8 @@ class CourseController extends Controller
     public function index(ResourceFilters $filters, Course $course)
     {
         return $this->generateCachedResponse(function () use ($filters, $course) {
-            $courses = $course->filter($filters);
+            $courses = $course->filter($filters)
+                ->where('status', '!=', 2);
 
             return $this->paginateOrGet($courses);
         });
@@ -85,7 +86,7 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->status = 0;
+        $course->status = 2;
         $course->save();
 
         return response($course);

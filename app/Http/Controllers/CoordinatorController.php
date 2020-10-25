@@ -85,8 +85,9 @@ class CoordinatorController extends Controller
      */
     public function destroy(Coordinator $coordinator)
     {
-        $coordinator->status = 0;
-        $coordinator->save();
+        $coordinator->delete();
+        $coordinator->user->userDetail->delete();
+        $coordinator->user->delete();
 
         return response(['message' => 'Deleted successfully'], 200);
     }

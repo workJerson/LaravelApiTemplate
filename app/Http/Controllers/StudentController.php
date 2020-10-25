@@ -16,7 +16,10 @@ class StudentController extends Controller
     public function index(ResourceFilters $filters, Student $student)
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
-            $students = $student->with(['user', 'user.userDetail', 'school', 'course'])->filter($filters);
+            $students = $student
+            ->with(['user', 'user.userDetail', 'school', 'course'])
+            ->filter($filters)
+            ->where('status', '!=', 2);
 
             return $this->paginateOrGet($students);
         });
@@ -85,7 +88,10 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        $student->status = 0;
+        $student->status = 2;
+        $student->user->status = 2;
         $student->save();
+
+        return response(['message' => 'Deleted successfully']);
     }
 }

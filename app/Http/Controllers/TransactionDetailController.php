@@ -25,12 +25,14 @@ class TransactionDetailController extends Controller
                         ->whereHas('transaction', function ($query) {
                             return $query->where('hub_id', request()->user()->coordinator->hub_id);
                         })
-                        ->filter($filters);
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 }
             } else {
                 $transactionDetails = $transactionDetail
                     ->where('event_status', 2)
-                    ->filter($filters);
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
             }
 
             $transactionDetails->with([
@@ -111,7 +113,7 @@ class TransactionDetailController extends Controller
      */
     public function destroy(TransactionDetail $transactionDetail)
     {
-        $transactionDetail->status = 0;
+        $transactionDetail->status = 2;
         $transactionDetail->save();
 
         return response(['message' => 'Deleted successfully']);

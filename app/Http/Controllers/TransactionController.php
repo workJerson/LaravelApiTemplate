@@ -104,17 +104,21 @@ class TransactionController extends Controller
                         ->whereHas('hub', function ($query) {
                             return $query->where('hub_id', request()->user()->coordinator->hub_id);
                         })
-                        ->filter($filters);
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 } else {
                     $studentId = request()->user()->student->id;
                     $transactions = $transaction
                         ->whereHas('student', function ($query) use ($studentId) {
                             return $query->where('student_id', $studentId);
                         })
-                        ->filter($filters);
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 }
             } else {
-                $transactions = $transaction->filter($filters);
+                $transactions = $transaction
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
             }
             $transactions->with(['hub', 'program', 'student.user.userDetail']);
 
@@ -220,7 +224,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        $transaction->status = 0;
+        $transaction->status = 2;
         $transaction->save();
 
         return response(['message' => 'Deleted successfully']);
