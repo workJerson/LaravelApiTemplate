@@ -30,4 +30,9 @@ class School extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function hubs()
+    {
+        return $this->hasMany(Hub::class);
+    }
 }
