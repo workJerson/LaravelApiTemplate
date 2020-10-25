@@ -24,6 +24,7 @@ class Hub extends Model
             'name',
             'status',
             'description',
+            'school_name'
         ];
     }
 
