@@ -25,7 +25,7 @@ class HubController extends Controller
                 $hubs = $hub->filter($filters)
                     ->where('status', '!=', 2);
             }
-
+            $hubs->with(['school']);
             return $this->paginateOrGet($hubs);
         });
     }
