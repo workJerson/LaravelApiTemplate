@@ -101,7 +101,7 @@ class TransactionController extends Controller
             if (request()->user()->account_type == 1 || request()->user()->account_type == 2) {
                 if (request()->user()->coordinator != null) {
                     $transactions = $transaction
-                        ->whereHas('hub', function ($query) {
+                        ->whereHas('student', function ($query) {
                             return $query->where('hub_id', request()->user()->coordinator->hub_id);
                         })
                         ->filter($filters)
