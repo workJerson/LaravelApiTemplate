@@ -35,7 +35,7 @@ class Student extends Model
         return [
             'student_number',
             'position',
-            'school_name',
+            'hub_school_name',
             'course_name',
             'user_email',
             'user_userDetail_first_name',

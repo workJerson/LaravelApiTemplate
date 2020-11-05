@@ -4,7 +4,8 @@ namespace App\Http\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Schema;
+use Illuminate\Support\Facades\Schema as FacadesSchema;
+use Illuminate\Support\Str;
 
 class ResourceFilters extends QueryFilters
 {
@@ -50,7 +51,7 @@ class ResourceFilters extends QueryFilters
 
         foreach ($fieldsArray as $field) {
             $explodedField = explode(':', $field);
-            $isDescending = starts_with($explodedField[1], '-');
+            $isDescending = Str::startsWith($explodedField[1], '-');
             $explodedField[1] = $isDescending ? substr($explodedField[1], 1) : $explodedField[1];
 
             $builder = $builder->with([
@@ -104,12 +105,12 @@ class ResourceFilters extends QueryFilters
         $builder = $this->builder;
 
         foreach (self::commaSeparatedStringToArray($fields) as $field) {
-            $isDescending = starts_with($field, '-');
+            $isDescending = Str::startsWith($field, '-');
             $column = $isDescending ? substr($field, 1) : $field;
 
             if (
                 !str_contains($field, '.')
-                && Schema::hasColumn($builder->getModel()->getTable(), $column)
+                && FacadesSchema::hasColumn($builder->getModel()->getTable(), $column)
             ) {
                 $builder = $builder->orderBy($column, $isDescending ? 'desc' : 'asc');
             }
@@ -137,7 +138,7 @@ class ResourceFilters extends QueryFilters
         if (
             str_contains($field, '_')
             && !str_contains($field, $this->builder->getModel()->getTable())
-            && !Schema::hasColumn($this->builder->getModel()->getTable(), $field)
+            && !FacadesSchema::hasColumn($this->builder->getModel()->getTable(), $field)
         ) {
             $parsedField = splitRelationshipsAndField($field, $this->builder->getModel());
             $relationship = $parsedField['relationship'];
@@ -173,7 +174,7 @@ class ResourceFilters extends QueryFilters
         if (
             str_contains($field, '_')
             && !str_contains($field, $this->builder->getModel()->getTable())
-            && !Schema::hasColumn($this->builder->getModel()->getTable(), $field)
+            && !FacadesSchema::hasColumn($this->builder->getModel()->getTable(), $field)
         ) {
             $parsedField = splitRelationshipsAndField($field, $this->builder->getModel());
             $relationship = $parsedField['relationship'];
@@ -269,7 +270,7 @@ class ResourceFilters extends QueryFilters
 
         if (
             str_contains($field, '_')
-            && !Schema::hasColumn($builder->getModel()->getTable(), $field)
+            && !FacadesSchema::hasColumn($builder->getModel()->getTable(), $field)
         ) {
             $parsedField = splitRelationshipsAndField($field, $builder->getModel());
             $relationship = $parsedField['relationship'];
@@ -290,7 +291,7 @@ class ResourceFilters extends QueryFilters
                     $query->where($relatedField, $searchOperator, $searchValue);
                 }
             });
-        } elseif (!Schema::hasColumn($builder->getModel()->getTable(), $field)) {
+        } elseif (!FacadesSchema::hasColumn($builder->getModel()->getTable(), $field)) {
             return $builder;
         }
 
