@@ -20,19 +20,19 @@ class ProgramLocalSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Baccalaureate',
                 'description' => 'Baccalaureate Program',
-                'total_price' => 75000.00,
+                'total_price' => 84999.00,
             ],
             [
                 'id' => 2,
                 'name' => 'Masters',
                 'description' => 'Masters Program',
-                'total_price' => 75000.00,
+                'total_price' => 103996.00,
             ],
             [
                 'id' => 3,
                 'name' => 'Doctoral',
                 'description' => 'Doctoral Program',
-                'total_price' => 75000.00,
+                'total_price' => 155000.00,
             ],
         ];
 

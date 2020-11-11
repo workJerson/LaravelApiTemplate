@@ -6,35 +6,28 @@ use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Program extends Model
+class AdditionalCharge extends Model
 {
     use HasFactory;
     use Filterable;
 
     protected $fillable = [
-        'name',
         'description',
-        'total_price',
         'status',
+        'amount',
     ];
 
     public function searchable()
     {
         return [
-            'name',
-            'status',
             'description',
-            'total_price',
+            'amount',
+            'program_name',
         ];
     }
 
-    public function transactions()
+    public function program()
     {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function additionalCharges()
-    {
-        return $this->hasMany(AdditionalCharge::class);
+        return $this->belongsTo(Program::class);
     }
 }

@@ -8,12 +8,15 @@ use App\Http\Requests\Transaction\GenerateSoaRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Models\Student;
 use App\Models\Transaction;
+use App\Traits\UsesTransactionDetailSchedules;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
+    use UsesTransactionDetailSchedules;
+
     protected $details = [
         [
             'type' => 'Program Orientation',
