@@ -17,53 +17,6 @@ class TransactionController extends Controller
 {
     use UsesTransactionDetailSchedules;
 
-    protected $details = [
-        [
-            'type' => 'Program Orientation',
-            'date' => 'September ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'October ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'November ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'December ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'January ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'February ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'March ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'April ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'May ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'June ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'July ',
-        ],
-    ];
-
     public function __construct()
     {
     }
@@ -145,6 +98,7 @@ class TransactionController extends Controller
      */
     public function store(CreateTransactionRequest $request, Transaction $transaction)
     {
+        $details = [];
         $now = Carbon::now();
         $request->validated();
         try {
@@ -154,16 +108,32 @@ class TransactionController extends Controller
 
                 $transactionObject->prefixed_id = $transactionObject->id;
                 $transactionObject->save();
-                foreach ($this->details as $key => $detail) {
-                    $transactionObject
-                    ->transactionDetails()
-                    ->create([
-                        'type' => $detail['type'],
-                        'transaction_date' => $detail['date'].$now->year,
-                        'event_status' => 1,
-                        'session_cost' => (float) $transactionObject->program->total_price / 11,
-                    ]);
+
+                switch ($request->program_id) {
+                    case 1:
+                        $details = $this->getBaccSchedule();
+                        break;
+                    case 2:
+                        $details = $this->getMasterSchedule();
+                        break;
+                    case 3:
+                        $details = $this->getDoctorSchedule();
+                        break;
+
+                    default:
+                        // code...
+                        break;
                 }
+                $transactionDetails = array_map(function ($schedule) use ($now) {
+                    return array_merge($schedule, [
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }, $details);
+
+                $transactionObject
+                    ->transactionDetails()
+                    ->insert($transactionDetails);
             } else {
                 return response()->json(['message' => 'Student has an ongoing transaction'], 400);
             }
