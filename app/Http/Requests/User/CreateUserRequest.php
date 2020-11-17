@@ -69,7 +69,7 @@ class CreateUserRequest extends FormRequest
                     'exists:hubs,id',
                 ];
             $rules['course_id'] = [
-                    'required',
+                    'nullable',
                     'numeric',
                     'exists:courses,id',
                 ];
