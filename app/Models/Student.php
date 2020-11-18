@@ -28,6 +28,7 @@ class Student extends Model
         'certificates',
         'remarks',
         'status',
+        'program_id',
     ];
 
     public function searchable()
@@ -40,7 +41,14 @@ class Student extends Model
             'user_email',
             'user_userDetail_first_name',
             'user_userDetail_last_name',
+            'program_name',
+            'program_description',
         ];
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 
     public function user()

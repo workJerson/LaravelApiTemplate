@@ -21,7 +21,7 @@ class StudentController extends Controller
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
             $students = $student
-            ->with(['user', 'user.userDetail', 'hub.school', 'course'])
+            ->with(['user', 'user.userDetail', 'hub.school', 'course', 'program'])
             ->filter($filters)
             ->where('status', '!=', 2);
 
@@ -66,6 +66,7 @@ class StudentController extends Controller
             'school',
             'transactions',
             'course',
+            'program',
         ]);
 
         return response($studentObject);
