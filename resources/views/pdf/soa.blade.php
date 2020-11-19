@@ -84,7 +84,7 @@
     <center>
         <h1>Statement of Account</h1>
         <p>{{ $transaction->student->hub->name }} Hub - "{{ $transaction->program->name }} Program"</p>
-        <p style="font-style: italic">{{ $transaction->program->description}}</p>
+        <p style="font-style: italic">{{ $transaction->program->course}}</p>
     </center>
     <div style="width: 100%; padding: 0 60px;">
         <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>

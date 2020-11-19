@@ -19,19 +19,19 @@ class ProgramLocalSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Baccalaureate',
-                'description' => 'Baccalaureate Program',
+                'course' => 'Baccalaureate Program',
                 'total_price' => 84999.00,
             ],
             [
                 'id' => 2,
                 'name' => 'Masters',
-                'description' => 'Masters Program',
+                'course' => 'Masters Program',
                 'total_price' => 103996.00,
             ],
             [
                 'id' => 3,
                 'name' => 'Doctoral',
-                'description' => 'Doctoral Program',
+                'course' => 'Doctoral Program',
                 'total_price' => 155000.00,
             ],
         ];
@@ -39,7 +39,7 @@ class ProgramLocalSeeder extends Seeder
         foreach ($programs as $program) {
             $programObject = Program::firstOrCreate(['id' => $program['id']], $program);
             if (!$programObject->wasRecentlyCreated) {
-                $programObject->update(Arr::only($program, ['name', 'description', 'total_price']));
+                $programObject->update(Arr::only($program, ['name', 'course', 'total_price']));
             }
         }
     }

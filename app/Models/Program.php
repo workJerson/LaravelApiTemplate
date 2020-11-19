@@ -13,7 +13,7 @@ class Program extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'course',
         'total_price',
         'status',
     ];
@@ -23,7 +23,7 @@ class Program extends Model
         return [
             'name',
             'status',
-            'description',
+            'course',
             'total_price',
         ];
     }

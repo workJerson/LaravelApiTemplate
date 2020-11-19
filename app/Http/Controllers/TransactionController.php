@@ -124,10 +124,11 @@ class TransactionController extends Controller
                         // code...
                         break;
                 }
-                $transactionDetails = array_map(function ($schedule) use ($now) {
+                $transactionDetails = array_map(function ($schedule) use ($now, $transactionObject) {
                     return array_merge($schedule, [
                         'created_at' => $now,
                         'updated_at' => $now,
+                        'transaction_id' => $transactionObject->id,
                     ]);
                 }, $details);
 
