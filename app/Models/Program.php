@@ -13,7 +13,7 @@ class Program extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'course',
         'total_price',
         'status',
     ];
@@ -23,7 +23,7 @@ class Program extends Model
         return [
             'name',
             'status',
-            'description',
+            'course',
             'total_price',
         ];
     }
@@ -31,5 +31,15 @@ class Program extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function additionalCharges()
+    {
+        return $this->hasMany(AdditionalCharge::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
     }
 }

@@ -37,7 +37,6 @@ class StudentSeeder extends Seeder
 
             $student = new Student([
                 'course_id' => 1,
-                'school_id' => 1,
                 'position' => 'Test Position',
             ]);
 

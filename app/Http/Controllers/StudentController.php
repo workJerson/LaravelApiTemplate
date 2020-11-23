@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +21,15 @@ class StudentController extends Controller
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
             $students = $student
-            ->with(['user', 'user.userDetail', 'hub.school', 'course'])
+            ->with(['user', 'user.userDetail', 'hub.school', 'course', 'program'])
             ->filter($filters)
             ->where('status', '!=', 2);
+
+            $user = request()->user();
+
+            if ($user->account_type == 2) {
+                $student->where('hub_id', $user->coordinator->hub_id);
+            }
 
             return $this->paginateOrGet($students);
         });
@@ -56,6 +66,7 @@ class StudentController extends Controller
             'school',
             'transactions',
             'course',
+            'program',
         ]);
 
         return response($studentObject);

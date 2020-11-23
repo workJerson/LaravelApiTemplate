@@ -58,7 +58,7 @@ class UpdateUserRequest extends FormRequest
                     'exists:hubs,id',
                 ];
         $rules['course_id'] = [
-                    'sometimes',
+                    'nullable',
                     'numeric',
                     'exists:courses,id',
                 ];

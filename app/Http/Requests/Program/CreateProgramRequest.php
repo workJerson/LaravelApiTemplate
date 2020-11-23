@@ -28,7 +28,7 @@ class CreateProgramRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'description' => [
+            'course' => [
                 'string',
                 'required',
             ],
