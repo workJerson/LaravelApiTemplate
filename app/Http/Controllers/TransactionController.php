@@ -157,8 +157,7 @@ class TransactionController extends Controller
         $transactionObject = $transaction->load([
             'program',
             'student',
-            'student.hub',
-            'hub.school',
+            'student.hub.school',
             'student.user.userDetail',
             'transactionDetails',
             'transactionDetails.payments',
