@@ -63,7 +63,7 @@ class CreateUserRequest extends FormRequest
         ];
         // Student
         if ($this->get('account_type') == 1) {
-            $rules['program'] = [
+            $rules['program_id'] = [
                     'nullable',
                     'numeric',
                     'exists:programs,id',
