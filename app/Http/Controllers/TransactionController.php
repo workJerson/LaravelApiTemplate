@@ -6,6 +6,7 @@ use App\Http\Filters\ResourceFilters;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
 use App\Http\Requests\Transaction\GenerateSoaRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\Transaction;
 use App\Traits\UsesTransactionDetailSchedules;
@@ -108,15 +109,16 @@ class TransactionController extends Controller
 
                 $transactionObject->prefixed_id = $transactionObject->id;
                 $transactionObject->save();
+                $program = Program::findOrFail($request->program_id);
 
-                switch ($request->program_id) {
-                    case 1:
+                switch ($program->name) {
+                    case 'Baccalaureate':
                         $details = $this->getBaccSchedule();
                         break;
-                    case 2:
+                    case 'Masters':
                         $details = $this->getMasterSchedule();
                         break;
-                    case 3:
+                    case 'Doctoral':
                         $details = $this->getDoctorSchedule();
                         break;
 
@@ -157,9 +159,7 @@ class TransactionController extends Controller
         $transactionObject = $transaction->load([
             'program',
             'student',
-            'student.school',
-            'student.hub',
-            'student.course',
+            'student.hub.school',
             'student.user.userDetail',
             'transactionDetails',
             'transactionDetails.payments',
