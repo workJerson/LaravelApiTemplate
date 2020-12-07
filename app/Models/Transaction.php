@@ -25,7 +25,13 @@ class Transaction extends Model
         'status',
         'event_status',
     ];
-    protected $appends = ['total_payment_made', 'total_remaining_balance'];
+    protected $appends = [
+        'total_payment_made',
+        'total_remaining_balance',
+        'total_admission_fee',
+        'total_additional_charge',
+        'additional_charge_label',
+    ];
 
     public function searchable()
     {
@@ -62,6 +68,49 @@ class Transaction extends Model
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function getTotalAdmissionFeeAttribute()
+    {
+        return $this->transactionDetails->where('type', 'Admission Fee')->first()->session_cost;
+    }
+
+    public function getAdditionalChargeLabelAttribute()
+    {
+        switch ($this->program->name) {
+            case 'Baccalaureate':
+                return 'Action Research';
+                break;
+            case 'Masters':
+                return 'Policy Paper';
+                break;
+            case 'Doctoral':
+                return 'Dissertation Fee';
+                break;
+
+            default:
+                // code...
+                break;
+        }
+    }
+
+    public function getTotalAdditionalChargeAttribute()
+    {
+        switch ($this->program->name) {
+            case 'Baccalaureate':
+                return $this->transactionDetails->where('type', 'Action Research')->first()->session_cost;
+                break;
+            case 'Masters':
+                return $this->transactionDetails->where('type', 'Policy Paper')->first()->session_cost;
+                break;
+            case 'Doctoral':
+                return $this->transactionDetails->where('type', 'Dissertation Fee')->first()->session_cost;
+                break;
+
+            default:
+                // code...
+                break;
+        }
     }
 
     public function getTotalPaymentMadeAttribute()
