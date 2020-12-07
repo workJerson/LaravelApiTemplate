@@ -67,7 +67,7 @@
 @foreach ($transactions as $transaction)
 <div class="container">
     <div class="column logo-container">
-        <img src="https://i.imgur.com/moh0QKH.jpg" class="logo">
+        <img src="https://i.imgur.com/0lXdCjU.jpeg" class="logo">
         <img src="https://i.imgur.com/moh0QKH.jpg" class="logo">
         <img src="https://i.imgur.com/NbCvADc.jpg" class="logo">
     </div>
@@ -148,7 +148,6 @@
             <hr class="hr-currency">
         </div>
     </div>
-    {{-- <p>*LEGEND: Registration fee less Allocation for Food equals Total Payments entered to your account.</p> --}}
     <center>
         <div style="margin-top: 5px">
             <p>If you have any questions/queries please contact us at:</p>
@@ -157,6 +156,11 @@
             <p>Email: jameslouiebaldoza@gmail.com</p>
         </div>
     </center>
+
+    @if($transaction->program->name == 'Doctoral')
+        <div class="page-break"></div>
+    @endif
+
     <div class="container" style="margin: 10px 0 0 90px; ">
         <div class="column">
             <p style="margin-bottom: 40px;">Prepared By:</p>
