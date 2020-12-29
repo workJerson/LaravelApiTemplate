@@ -45,6 +45,8 @@ class Student extends Model
             'user_userDetail_last_name',
             'program_name',
             'program_course',
+            'program_id',
+            'course_id',
         ];
     }
 
