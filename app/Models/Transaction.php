@@ -20,7 +20,6 @@ class Transaction extends Model
         'program_id',
         'total_actual_amount',
         'total_amount_paid',
-        'program_id',
         'student_id',
         'status',
         'event_status',

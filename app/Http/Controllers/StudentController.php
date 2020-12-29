@@ -42,7 +42,7 @@ class StudentController extends Controller
                 'program.courses',
                 'coordinator.user.userDetail',
                 'transactions' => function ($q) {
-                    $q->select('id', 'student_id')->where('event_status', 1);
+                    $q->where('event_status', 1);
                 }, ]));
         });
     }
