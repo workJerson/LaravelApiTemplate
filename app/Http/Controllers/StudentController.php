@@ -27,7 +27,7 @@ class StudentController extends Controller
                 'hub.school',
                 'course',
                 'program',
-                'program.course',
+                'program.courses',
                 'coordinator',
                 'transactions' => function ($q) {
                     $q->select('id', 'student_id')->where('event_status', 1);
