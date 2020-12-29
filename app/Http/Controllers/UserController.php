@@ -68,8 +68,8 @@ class UserController extends Controller
                     $student->user_id = $userObject->id;
                     $student->save();
                     $student->student_number = $userObject->id;
-                    if (request()->user->account_type == 2) {
-                        $student->coordinator_id = request()->user->coordinator->id;
+                    if (request()->user()->account_type == 2) {
+                        $student->coordinator_id = request()->user()->coordinator->id;
                     }
                     $student->save();
                     break;
