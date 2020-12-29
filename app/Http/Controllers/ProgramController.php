@@ -17,7 +17,8 @@ class ProgramController extends Controller
     {
         return $this->generateCachedResponse(function () use ($filters, $program) {
             $programs = $program->filter($filters)
-                ->where('status', '!=', 2);
+                ->where('status', '!=', 2)
+                ->with(['courses']);
 
             return $this->paginateOrGet($programs);
         });
