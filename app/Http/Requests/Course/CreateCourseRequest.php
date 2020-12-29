@@ -36,6 +36,11 @@ class CreateCourseRequest extends FormRequest
                 'required',
                 'numeric',
             ],
+            'program_id' => [
+                'required',
+                'numeric',
+                'exists:programs,id',
+            ],
         ];
     }
 }

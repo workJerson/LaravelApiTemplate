@@ -29,6 +29,8 @@ class Student extends Model
         'remarks',
         'status',
         'program_id',
+        'coordinator_id',
+        'years_in_gov',
     ];
 
     public function searchable()
@@ -82,5 +84,10 @@ class Student extends Model
         $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
 
         $this->attributes['student_number'] = "STD-$year-$paddedId";
+    }
+
+    public function coordinator()
+    {
+        return $this->belongsTo(Coordinator::class);
     }
 }

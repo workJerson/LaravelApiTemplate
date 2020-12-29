@@ -34,6 +34,7 @@ class TransactionController extends Controller
             'transactionDetails',
             'transactionDetails.payments',
             'program',
+            'program.course',
             'student',
             'student.user',
             'student.user.userDetail',

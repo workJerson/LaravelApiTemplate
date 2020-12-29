@@ -63,10 +63,24 @@ class CreateUserRequest extends FormRequest
         ];
         // Student
         if ($this->get('account_type') == 1) {
+            $rules['coordinator_id'] = [
+                    'nullable',
+                    'numeric',
+                    'exists:coordinator,id',
+                ];
+            $rules['years_in_gov'] = [
+                    'nullable',
+                    'numeric',
+                ];
             $rules['program_id'] = [
                     'nullable',
                     'numeric',
                     'exists:programs,id',
+                ];
+            $rules['course_id'] = [
+                    'nullable',
+                    'numeric',
+                    'exists:courses,id',
                 ];
             $rules['hub_id'] = [
                     'required',

@@ -51,7 +51,7 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        $programObject = $program;
+        $programObject = $program->with(['courses']);
 
         return response($programObject);
     }
