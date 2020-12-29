@@ -32,7 +32,6 @@ class StudentController extends Controller
                 'transactions' => function ($q) {
                     $q->select('id', 'student_id')->where('event_status', 1);
                 }, ])
-            ->filter($filters)
             ->where('status', '!=', 2);
 
             $user = request()->user();
@@ -40,6 +39,8 @@ class StudentController extends Controller
             if ($user->account_type == 2) {
                 $student->where('coordinator_id', $user->coordinator->id);
             }
+
+            $students->filter($filters);
 
             return $this->paginateOrGet($students);
         });
