@@ -20,8 +20,19 @@ class StudentController extends Controller
     public function index(ResourceFilters $filters, Student $student)
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
-            $students = $student
-            ->with([
+            $students = $student->
+                join('user_details', 'students.user_id', '=', 'user_details.user_id')
+                ->orderBy('user_details.last_name', 'desc')
+                ->where('status', '!=', 2)
+                ->filter($filters);
+
+            $user = request()->user();
+
+            if ($user->account_type == 2) {
+                $students->where('coordinator_id', $user->coordinator->id);
+            }
+
+            return $this->paginateOrGet($students->with([
                 'user',
                 'user.userDetail',
                 'hub.school',
@@ -31,18 +42,7 @@ class StudentController extends Controller
                 'coordinator.user.userDetail',
                 'transactions' => function ($q) {
                     $q->select('id', 'student_id')->where('event_status', 1);
-                }, ])
-            ->where('status', '!=', 2)
-            ->orderBy('user.userDetail.last_name', 'desc')
-            ->filter($filters);
-
-            $user = request()->user();
-
-            if ($user->account_type == 2) {
-                $students->where('coordinator_id', $user->coordinator->id);
-            }
-
-            return $this->paginateOrGet($students);
+                }, ]));
         });
     }
 
