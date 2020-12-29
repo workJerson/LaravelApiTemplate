@@ -33,6 +33,7 @@ class StudentController extends Controller
                     $q->select('id', 'student_id')->where('event_status', 1);
                 }, ])
             ->where('status', '!=', 2)
+            ->orderBy('user.userDetail.last_name', 'desc')
             ->filter($filters);
 
             $user = request()->user();
