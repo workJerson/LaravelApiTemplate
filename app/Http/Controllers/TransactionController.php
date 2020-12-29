@@ -34,7 +34,7 @@ class TransactionController extends Controller
             'transactionDetails',
             'transactionDetails.payments',
             'program',
-            'program.course',
+            'course',
             'student',
             'student.user',
             'student.user.userDetail',
@@ -78,7 +78,7 @@ class TransactionController extends Controller
                     ->filter($filters)
                     ->where('status', '!=', 2);
             }
-            $transactions->with(['program', 'student.user.userDetail', 'student.hub.school']);
+            $transactions->with(['program', 'student.user.userDetail', 'student.hub.school', 'course']);
 
             return $this->paginateOrGet($transactions);
         });
@@ -159,7 +159,7 @@ class TransactionController extends Controller
     {
         $transactionObject = $transaction->load([
             'program',
-            'program.course',
+            'course',
             'student',
             'student.hub.school',
             'student.user.userDetail',

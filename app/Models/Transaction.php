@@ -18,6 +18,7 @@ class Transaction extends Model
     protected $fillable = [
         'prefixed_id',
         'program_id',
+        'course_id',
         'total_actual_amount',
         'total_amount_paid',
         'student_id',
@@ -62,6 +63,11 @@ class Transaction extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function transactionDetails()
