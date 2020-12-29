@@ -20,8 +20,9 @@ class StudentController extends Controller
     public function index(ResourceFilters $filters, Student $student)
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
-            $students = $student->
-                join('user_details', 'students.user_id', '=', 'user_details.user_id')
+            $students = $student
+                ->select('students.*')
+                ->join('user_details', 'students.user_id', '=', 'user_details.user_id')
                 ->orderBy('user_details.last_name', 'asc')
                 ->where('status', '!=', 2)
                 ->filter($filters);
