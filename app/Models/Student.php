@@ -29,6 +29,8 @@ class Student extends Model
         'remarks',
         'status',
         'program_id',
+        'coordinator_id',
+        'years_in_gov',
     ];
 
     public function searchable()
@@ -43,12 +45,14 @@ class Student extends Model
             'user_userDetail_last_name',
             'program_name',
             'program_course',
+            'program_id',
+            'course_id',
         ];
     }
 
     public function program()
     {
-        return $this->belongsTo(Program::class);
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function user()
@@ -82,5 +86,10 @@ class Student extends Model
         $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
 
         $this->attributes['student_number'] = "STD-$year-$paddedId";
+    }
+
+    public function coordinator()
+    {
+        return $this->belongsTo(Coordinator::class);
     }
 }

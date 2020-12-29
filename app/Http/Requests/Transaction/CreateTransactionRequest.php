@@ -29,6 +29,11 @@ class CreateTransactionRequest extends FormRequest
                 'numeric',
                 'exists:programs,id',
             ],
+            'course_id' => [
+                'required',
+                'numeric',
+                'exists:courses,id',
+            ],
             'student_id' => [
                 'required',
                 'numeric',

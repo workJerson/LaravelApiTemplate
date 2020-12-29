@@ -21,17 +21,29 @@ class StudentController extends Controller
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
             $students = $student
-            ->with(['user', 'user.userDetail', 'hub.school', 'course', 'program'])
-            ->filter($filters)
-            ->where('status', '!=', 2);
+                ->select('students.*')
+                ->join('user_details', 'students.user_id', '=', 'user_details.user_id')
+                ->orderBy('user_details.last_name', 'asc')
+                ->where('status', '!=', 2)
+                ->filter($filters);
 
             $user = request()->user();
 
             if ($user->account_type == 2) {
-                $student->where('hub_id', $user->coordinator->hub_id);
+                $students->where('coordinator_id', $user->coordinator->id);
             }
 
-            return $this->paginateOrGet($students);
+            return $this->paginateOrGet($students->with([
+                'user',
+                'user.userDetail',
+                'hub.school',
+                'course',
+                'program',
+                'program.courses',
+                'coordinator.user.userDetail',
+                'transactions' => function ($q) {
+                    $q->where('event_status', 1);
+                }, ]));
         });
     }
 
