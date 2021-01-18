@@ -30,18 +30,21 @@ class TransactionController extends Controller
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
         $request->validated();
-        $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
-            'transactionDetails',
-            'transactionDetails.payments',
-            'program',
-            'course',
-            'student',
-            'student.user',
-            'student.user.userDetail',
-            'student.school',
-            'student.course',
-            'student.hub.school',
-        ])->get();
+        $transactions['transactions'] = $transaction
+            ->whereIn('id', $request->transaction_ids)
+            ->where('event_status', 2)
+            ->with([
+                'transactionDetails',
+                'transactionDetails.payments',
+                'program',
+                'course',
+                'student',
+                'student.user',
+                'student.user.userDetail',
+                'student.school',
+                'student.course',
+                'student.hub.school',
+            ])->get();
         $pdf = PDF::loadView('pdf.soa', $transactions);
         $fileName = Carbon::now()->format('Ymdhis');
 
