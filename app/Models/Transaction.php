@@ -31,6 +31,7 @@ class Transaction extends Model
         'total_admission_fee',
         'total_additional_charge',
         'additional_charge_label',
+        'can_generate_soa',
     ];
 
     public function searchable()
@@ -73,6 +74,11 @@ class Transaction extends Model
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function getCanGenerateSoaAttribute()
+    {
+        return $this->transactionDetails->where('event_status', '3')->count() > 0 ? 1 : 0;
     }
 
     public function getTotalAdmissionFeeAttribute()
