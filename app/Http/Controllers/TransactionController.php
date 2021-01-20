@@ -32,7 +32,6 @@ class TransactionController extends Controller
         $request->validated();
         $transactions['transactions'] = $transaction
             ->whereIn('id', $request->transaction_ids)
-            ->where('event_status', 2)
             ->with([
                 'transactionDetails',
                 'transactionDetails.payments',
