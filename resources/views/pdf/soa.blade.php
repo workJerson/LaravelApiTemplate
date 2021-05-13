@@ -112,7 +112,7 @@
         <tr>
             <td class='td-left'>{{ $transactionDetail->type }}</td>
             <td class='td-left'>{{ $transactionDetail->transaction_date }}</td>
-            <td>{{ $transactionDetail->all_official_receipt }}</td>
+            <td>{{ $transactionDetail->event_status <= 2 ? '' : $transactionDetail->all_official_receipt }}</td>
             <td>@convert($transactionDetail->session_cost)</td>
             <td>@convert($transactionDetail->total_paid_payments)</td>
         </tr>
