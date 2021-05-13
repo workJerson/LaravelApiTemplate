@@ -88,7 +88,7 @@
     </center>
     <div style="width: 100%; padding: 0 60px;">
         <p>To: <span style="padding-left: 10px; font-weight:bold; font-size: 1em;">{{ $transaction->student->user->userDetail->full_name }}</span></p>
-        <div style="width: 100%; padding-left: 35px; margin-bottom: 15px;">
+        <div style="width: 100%; padding-left: 35px; margin-bottom: 5px;">
             <p>{{ $transaction->student->user->userDetail->address }}</p>
             <p>{{ $transaction->student->hub->name }} Hub</p>
         </div>
@@ -98,7 +98,6 @@
             </span>
             , payable upon the indiciation session cost
         </p>
-        <br>
         <p><span style="font-weight: bold"> Table 1.</span> <span style="font-style: italic">Schedule of Payments</span></p>
     </div>
     <table>
@@ -126,7 +125,7 @@
             <td>@convert($transaction->transactionDetails->sum('total_paid_payments'))</td>
         </tr>
     </table>
-    <div class="container" style="margin: 10px 0 10px 90px;">
+    <div class="container" style="margin: 0 0 0 90px;">
         <div class="column">
             <p>Training/Seminar Fees <span style="font-style: italic;">(Program Cost)</span></p>
             <p>Admission Fee</p>
@@ -143,6 +142,7 @@
             <hr class="hr-currency">
             <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span>  @convert($transaction->program->total_price)</p>
             <p> @convert($transaction->transactionDetails->sum('total_paid_payments'))</p>
+            <hr class="hr-currency">
             <br>
             <p style="font-weight: bold;"><span style="padding-right: 60px;">Php</span> @convert($transaction->program->total_price - $transaction->transactionDetails->sum('total_paid_payments'))</p>
             <hr class="hr-currency">
@@ -151,24 +151,24 @@
     <center>
         <div style="margin-top: 5px">
             <p>If you have any questions/queries please contact us at:</p>
-            <p>Smart: +63930-909-8564</p>
+            {{-- <p>Smart: +63930-909-8564</p> --}}
             <p>Globe: +63916-331-8962</p>
             <p>Email: jameslouiebaldoza@gmail.com</p>
         </div>
     </center>
 
-    @if($transaction->program->name == 'Doctoral')
+    {{-- @if($transaction->program->name == 'Doctoral')
         <div class="page-break"></div>
-    @endif
+    @endif --}}
 
     <div class="container" style="margin: 10px 0 0 90px; ">
         <div class="column">
-            <p style="margin-bottom: 40px;">Prepared By:</p>
+            <p style="margin-bottom: 20px;">Prepared By:</p>
             <p style="font-weight: bold">JAMES LOUIE P. BALDOZA, MPA</p>
             <p style="margin-left: 20px;">Program/Accounting Coordinator</p>
         </div>
         <div class="column" style="margin-left: 30px;">
-            <p style="margin-bottom: 40px;">Noted By:</p>
+            <p style="margin-bottom: 20px;">Noted By:</p>
             <p style="font-weight: bold">DR HELARIO T. CAMINERO</p>
             <p style="margin-left: 45px;">Executive Director</p>
         </div>
