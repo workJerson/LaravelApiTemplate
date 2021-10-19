@@ -38,7 +38,7 @@ class CreateUserRequest extends FormRequest
                 'string',
             ],
             'middle_name' => [
-                'sometimes',
+                'nullable',
                 'string',
             ],
             'address' => [
@@ -63,13 +63,32 @@ class CreateUserRequest extends FormRequest
         ];
         // Student
         if ($this->get('account_type') == 1) {
-            $rules['school_id'] = [
-                    'required',
+            $rules['coordinator_id'] = [
+                    'nullable',
                     'numeric',
-                    'exists:schools,id',
+                    'exists:coordinator,id',
+                ];
+            $rules['years_in_gov'] = [
+                    'nullable',
+                    'numeric',
+                ];
+            $rules['program_id'] = [
+                    'nullable',
+                    'numeric',
+                    'exists:programs,id',
                 ];
             $rules['course_id'] = [
+                    'nullable',
+                    'numeric',
+                    'exists:courses,id',
+                ];
+            $rules['hub_id'] = [
                     'required',
+                    'numeric',
+                    'exists:hubs,id',
+                ];
+            $rules['course_id'] = [
+                    'nullable',
                     'numeric',
                     'exists:courses,id',
                 ];

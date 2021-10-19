@@ -29,10 +29,10 @@ class CreateTransactionRequest extends FormRequest
                 'numeric',
                 'exists:programs,id',
             ],
-            'hub_id' => [
+            'course_id' => [
                 'required',
                 'numeric',
-                'exists:hubs,id',
+                'exists:courses,id',
             ],
             'student_id' => [
                 'required',

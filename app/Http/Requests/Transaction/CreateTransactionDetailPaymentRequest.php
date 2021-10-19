@@ -35,7 +35,7 @@ class CreateTransactionDetailPaymentRequest extends FormRequest
             ],
             'payment_made' => [
                 'numeric',
-                'required',
+                'sometimes',
                 'between:0.000001,999999999999.999999',
             ],
         ];

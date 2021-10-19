@@ -11,28 +11,40 @@ class Transaction extends Model
 {
     use HasFactory;
     use Filterable;
-
+    /**
+     *  event_status 1 = In Progress
+     *  event_status 2 = Done.
+     */
     protected $fillable = [
         'prefixed_id',
         'program_id',
+        'course_id',
         'total_actual_amount',
         'total_amount_paid',
-        'program_id',
-        'hub_id',
         'student_id',
         'status',
         'event_status',
+    ];
+    protected $appends = [
+        'total_payment_made',
+        'total_remaining_balance',
+        'total_admission_fee',
+        'total_additional_charge',
+        'additional_charge_label',
+        'can_generate_soa',
     ];
 
     public function searchable()
     {
         return [
-            'hub_id',
             'status',
             'event_status',
             'program_name',
             'student_student_number',
-            'hub_name',
+            'student_user_userDetail_first_name',
+            'student_user_userDetail_last_name',
+            'student_hub_name',
+            'prefixed_id',
         ];
     }
 
@@ -42,11 +54,6 @@ class Transaction extends Model
         $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
 
         $this->attributes['prefixed_id'] = "TRANS$year$paddedId";
-    }
-
-    public function hub()
-    {
-        return $this->belongsTo(Hub::class);
     }
 
     public function program()
@@ -59,8 +66,71 @@ class Transaction extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function getCanGenerateSoaAttribute()
+    {
+        return $this->transactionDetails->where('event_status', '3')->count() > 0 ? 1 : 0;
+    }
+
+    public function getTotalAdmissionFeeAttribute()
+    {
+        return $this->transactionDetails->where('type', 'Admission Fee')->first()->session_cost;
+    }
+
+    public function getAdditionalChargeLabelAttribute()
+    {
+        switch ($this->program->name) {
+            case 'Baccalaureate':
+                return 'Action Research';
+                break;
+            case 'Masters':
+                return 'Policy Paper';
+                break;
+            case 'Doctoral':
+                return 'Dissertation Fee';
+                break;
+
+            default:
+                // code...
+                break;
+        }
+    }
+
+    public function getTotalAdditionalChargeAttribute()
+    {
+        switch ($this->program->name) {
+            case 'Baccalaureate':
+                return $this->transactionDetails->where('type', 'Action Research')->first()->session_cost;
+                break;
+            case 'Masters':
+                return $this->transactionDetails->where('type', 'Policy Paper')->first()->session_cost;
+                break;
+            case 'Doctoral':
+                return $this->transactionDetails->where('type', 'Dissertation Fee')->first()->session_cost;
+                break;
+
+            default:
+                // code...
+                break;
+        }
+    }
+
+    public function getTotalPaymentMadeAttribute()
+    {
+        return $this->transactionDetails->sum('total_payment_made');
+    }
+
+    public function getTotalRemainingBalanceAttribute()
+    {
+        return $this->program->total_price - $this->transactionDetails->sum('total_payment_made');
     }
 }

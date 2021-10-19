@@ -23,7 +23,9 @@ class UserController extends Controller
     public function index(ResourceFilters $filters, User $user)
     {
         return $this->generateCachedResponse(function () use ($filters, $user) {
-            $users = $user->with(['userDetails'])->filter($filters);
+            $users = $user->with(['userDetails'])
+                ->filter($filters)
+                ->where('status', '!=', 2);
 
             return $this->paginateOrGet($users);
         });
@@ -66,6 +68,9 @@ class UserController extends Controller
                     $student->user_id = $userObject->id;
                     $student->save();
                     $student->student_number = $userObject->id;
+                    if (request()->user()->account_type == 2) {
+                        $student->coordinator_id = request()->user()->coordinator->id;
+                    }
                     $student->save();
                     break;
                 // Coordinator
@@ -177,7 +182,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->status = 0;
+        $user->status = 2;
         $user->save();
 
         return response($user);

@@ -33,7 +33,7 @@ class UpdateUserRequest extends FormRequest
                 'string',
             ],
             'middle_name' => [
-                'sometimes',
+                'nullable',
                 'string',
             ],
             'address' => [
@@ -52,13 +52,13 @@ class UpdateUserRequest extends FormRequest
             ],
         ];
 
-        $rules['school_id'] = [
+        $rules['hub_id'] = [
                     'sometimes',
                     'numeric',
-                    'exists:schools,id',
+                    'exists:hubs,id',
                 ];
         $rules['course_id'] = [
-                    'sometimes',
+                    'nullable',
                     'numeric',
                     'exists:courses,id',
                 ];

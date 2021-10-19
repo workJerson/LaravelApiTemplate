@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Hub;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class HubLocalSeeder extends Seeder
 {
@@ -14,34 +15,39 @@ class HubLocalSeeder extends Seeder
      */
     public function run()
     {
-        if (!Hub::first()) {
-            $data = [
-                [
-                    'name' => 'Bicol',
-                    'description' => 'Bicol Hub',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                     'name' => 'Palawan',
-                     'description' => 'Palawan Hub',
-                     'created_at' => date('Y-m-d H:i:s'),
-                     'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                     'name' => 'Cebu',
-                     'description' => 'Cebu Hub',
-                     'created_at' => date('Y-m-d H:i:s'),
-                     'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                     'name' => 'Laguna',
-                     'description' => 'Laguna Hub',
-                     'created_at' => date('Y-m-d H:i:s'),
-                     'updated_at' => date('Y-m-d H:i:s'),
-                ],
-            ];
-            Hub::insert($data);
+        $hubs = [
+            [
+                'id' => 1,
+                'name' => 'NCR',
+                'description' => 'NCR HUB',
+            ],
+            [
+                'id' => 2,
+                'name' => 'EDL NCR',
+                'description' => 'EDL NCR HUB',
+            ],
+            [
+                'id' => 3,
+                'name' => 'DAVAO DE ORO',
+                'description' => 'DAVAO DE ORO HUB',
+            ],
+            [
+                'id' => 4,
+                'name' => 'DAVAO',
+                'description' => 'DAVAO HUB',
+            ],
+            [
+                'id' => 5,
+                'name' => 'SOX',
+                'description' => 'SOCCSKSARGEN HUB',
+            ],
+        ];
+
+        foreach ($hubs as $hub) {
+            $hubObject = Hub::firstOrCreate(['id' => $hub['id']], $hub);
+            if (!$hubObject->wasRecentlyCreated) {
+                $hubObject->update(Arr::only($hub, ['name', 'description']));
+            }
         }
     }
 }

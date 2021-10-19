@@ -17,8 +17,22 @@ class School extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'address',
+            'status',
+        ];
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function hubs()
+    {
+        return $this->hasMany(Hub::class);
     }
 }

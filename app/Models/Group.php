@@ -17,6 +17,15 @@ class Group extends Model
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'description',
+            'status',
+        ];
+    }
+
     public function cmsProfiles()
     {
         return $this->hasMany(CmsProfile::class);

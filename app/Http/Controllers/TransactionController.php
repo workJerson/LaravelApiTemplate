@@ -5,91 +5,49 @@ namespace App\Http\Controllers;
 use App\Http\Filters\ResourceFilters;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
 use App\Http\Requests\Transaction\GenerateSoaRequest;
+use App\Http\Requests\Transaction\UpdateTransactionRequest;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\Transaction;
+use App\Traits\UsesTransactionDetailSchedules;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
-    protected $details = [
-        [
-            'type' => 'Program Orientation',
-            'date' => 'September ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'October ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'November ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'December ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'January ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'February ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'March ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'April ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'May ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'June ',
-        ],
-        [
-            'type' => 'Training/Seminar Fee',
-            'date' => 'July ',
-        ],
-    ];
+    use UsesTransactionDetailSchedules;
 
     public function __construct()
     {
     }
 
+    public function getMonthsFilter()
+    {
+        return response(['months' => $this->details]);
+    }
+
     public function generateSoa(GenerateSoaRequest $request, Transaction $transaction)
     {
-        // sendGridEmail([
-        //     'subject' => 'Welcome to Rightfield Printing and Supplies Ltd.',
-        //     'recipient' => 'jersonyanihh@gmail.com',
-        //     'recipient_name' => 'jerson',
-        //     'content' => 'Welcome to Rightfield Printing and Supplies Ltd. you can now order and use your account. You can login in this link <a href="http://ecom-project-2.s3-website-ap-southeast-1.amazonaws.com/#/"> Click here</a>',
-        // ]);
-
-        // return response('ok');
         $request->validated();
-        $transactions['transactions'] = $transaction->whereIn('id', $request->transaction_ids)->with([
-            'transactionDetails',
-            'transactionDetails.payments',
-            'hub',
-            'program',
-            'student',
-            'student.user',
-            'student.user.userDetail',
-            'student.school',
-            'student.course',
-        ])->get();
-
+        $transactions['transactions'] = $transaction
+            ->whereIn('id', $request->transaction_ids)
+            ->with([
+                'transactionDetails',
+                'transactionDetails.payments',
+                'program',
+                'course',
+                'student',
+                'student.user',
+                'student.user.userDetail',
+                'student.school',
+                'student.course',
+                'student.hub.school',
+            ])->get();
         $pdf = PDF::loadView('pdf.soa', $transactions);
+        $fileName = Carbon::now()->format('Ymdhis');
 
-        return $pdf->download('invoice.pdf');
+        return $pdf->download("SOA$fileName.pdf");
     }
 
     /**
@@ -100,20 +58,29 @@ class TransactionController extends Controller
     public function index(ResourceFilters $filters, Transaction $transaction)
     {
         return $this->generateCachedResponse(function () use ($filters, $transaction) {
-            if (request()->user()->account_type == 1) {
+            if (request()->user()->account_type == 1 || request()->user()->account_type == 2) {
                 if (request()->user()->coordinator != null) {
-                    $actor = 'coordinator';
+                    $transactions = $transaction
+                        ->whereHas('student', function ($query) {
+                            return $query->where('hub_id', request()->user()->coordinator->hub_id);
+                        })
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 } else {
-                    $actor = 'student';
+                    $studentId = request()->user()->student->id;
+                    $transactions = $transaction
+                        ->whereHas('student', function ($query) use ($studentId) {
+                            return $query->where('student_id', $studentId);
+                        })
+                        ->filter($filters)
+                        ->where('status', '!=', 2);
                 }
-                $transactions = request()
-                    ->user()
-                    ->{$actor}
-                    ->transactions()
-                    ->filter($filters);
             } else {
-                $transactions = $transaction->filter($filters);
+                $transactions = $transaction
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
             }
+            $transactions->with(['program', 'student.user.userDetail', 'student.hub.school', 'course']);
 
             return $this->paginateOrGet($transactions);
         });
@@ -135,6 +102,7 @@ class TransactionController extends Controller
      */
     public function store(CreateTransactionRequest $request, Transaction $transaction)
     {
+        $details = [];
         $now = Carbon::now();
         $request->validated();
         try {
@@ -142,15 +110,36 @@ class TransactionController extends Controller
             if (!Student::findOrFail($request->student_id)->transactions->where('event_status', 1)->count() > 0) {
                 $transactionObject = $transaction->create($request->all());
 
-                foreach ($this->details as $key => $detail) {
-                    $transactionObject
-                    ->transactionDetails()
-                    ->create([
-                        'type' => $detail['type'],
-                        'transaction_date' => $detail['date'].$now->year,
-                        'event_status' => 1,
-                    ]);
+                $transactionObject->prefixed_id = $transactionObject->id;
+                $transactionObject->save();
+                $program = Program::findOrFail($request->program_id);
+
+                switch ($program->name) {
+                    case 'Baccalaureate':
+                        $details = $this->getBaccSchedule();
+                        break;
+                    case 'Masters':
+                        $details = $this->getMasterSchedule();
+                        break;
+                    case 'Doctoral':
+                        $details = $this->getDoctorSchedule();
+                        break;
+
+                    default:
+                        // code...
+                        break;
                 }
+                $transactionDetails = array_map(function ($schedule) use ($now, $transactionObject) {
+                    return array_merge($schedule, [
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                        'transaction_id' => $transactionObject->id,
+                    ]);
+                }, $details);
+
+                $transactionObject
+                    ->transactionDetails()
+                    ->insert($transactionDetails);
             } else {
                 return response()->json(['message' => 'Student has an ongoing transaction'], 400);
             }
@@ -171,9 +160,11 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $transactionObject = $transaction->load([
-            'hub',
             'program',
+            'course',
             'student',
+            'student.hub.school',
+            'student.user.userDetail',
             'transactionDetails',
             'transactionDetails.payments',
         ]);
@@ -197,7 +188,7 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateTransactionRequest $request, Transaction $transaction)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
         $transaction->update($request->validated());
 
@@ -211,7 +202,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        $transaction->status = 0;
+        $transaction->status = 2;
         $transaction->save();
 
         return response(['message' => 'Deleted successfully']);

@@ -30,6 +30,13 @@ class User extends Authenticatable implements CanResetPasswordClass
          'login_attempts',
     ];
 
+    public function searchable()
+    {
+        return [
+            'userDetail_full_name',
+        ];
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

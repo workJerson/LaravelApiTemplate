@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +20,30 @@ class StudentController extends Controller
     public function index(ResourceFilters $filters, Student $student)
     {
         return $this->generateCachedResponse(function () use ($filters, $student) {
-            $students = $student->with(['user', 'user.userDetail', 'school', 'course'])->filter($filters);
+            $students = $student
+                ->select('students.*')
+                ->join('user_details', 'students.user_id', '=', 'user_details.user_id')
+                ->orderBy('user_details.last_name', 'asc')
+                ->where('status', '!=', 2)
+                ->filter($filters);
 
-            return $this->paginateOrGet($students);
+            $user = request()->user();
+
+            if ($user->account_type == 2) {
+                $students->where('coordinator_id', $user->coordinator->id);
+            }
+
+            return $this->paginateOrGet($students->with([
+                'user',
+                'user.userDetail',
+                'hub.school',
+                'course',
+                'program',
+                'program.courses',
+                'coordinator.user.userDetail',
+                'transactions' => function ($q) {
+                    $q->where('event_status', 1);
+                }, ]));
         });
     }
 
@@ -53,6 +78,7 @@ class StudentController extends Controller
             'school',
             'transactions',
             'course',
+            'program',
         ]);
 
         return response($studentObject);
@@ -85,7 +111,10 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        $student->status = 0;
+        $student->status = 2;
+        $student->user->status = 2;
         $student->save();
+
+        return response(['message' => 'Deleted successfully']);
     }
 }

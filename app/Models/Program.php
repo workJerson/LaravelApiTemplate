@@ -13,13 +13,38 @@ class Program extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'course',
         'total_price',
         'status',
     ];
 
+    public function searchable()
+    {
+        return [
+            'name',
+            'status',
+            'course',
+            'total_price',
+        ];
+    }
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function additionalCharges()
+    {
+        return $this->hasMany(AdditionalCharge::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
     }
 }

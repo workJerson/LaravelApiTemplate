@@ -16,7 +16,9 @@ class ProgramController extends Controller
     public function index(ResourceFilters $filters, Program $program)
     {
         return $this->generateCachedResponse(function () use ($filters, $program) {
-            $programs = $program->filter($filters);
+            $programs = $program->filter($filters)
+                ->where('status', '!=', 2)
+                ->with(['courses']);
 
             return $this->paginateOrGet($programs);
         });
@@ -50,7 +52,7 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        $programObject = $program;
+        $programObject = $program->with(['courses']);
 
         return response($programObject);
     }
@@ -85,7 +87,7 @@ class ProgramController extends Controller
      */
     public function destroy(Program $program)
     {
-        $program->status;
+        $program->status = 2;
         $program->save();
 
         return response($program);

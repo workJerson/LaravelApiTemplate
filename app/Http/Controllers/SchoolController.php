@@ -16,7 +16,8 @@ class SchoolController extends Controller
     public function index(ResourceFilters $filters, School $school)
     {
         return $this->generateCachedResponse(function () use ($filters, $school) {
-            $schools = $school->filter($filters);
+            $schools = $school->filter($filters)
+                ->where('status', '!=', 2);
 
             return $this->paginateOrGet($schools);
         });
@@ -84,7 +85,7 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        $school->status = 0;
+        $school->status = 2;
         $school->save();
 
         return response($school);

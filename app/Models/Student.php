@@ -16,7 +16,7 @@ class Student extends Model
         'student_number',
         'user_id',
         'course_id',
-        'school_id',
+        'hub_id',
         'position',
         'ccaps',
         'letter_of_intent',
@@ -28,6 +28,9 @@ class Student extends Model
         'certificates',
         'remarks',
         'status',
+        'program_id',
+        'coordinator_id',
+        'years_in_gov',
     ];
 
     public function searchable()
@@ -35,12 +38,21 @@ class Student extends Model
         return [
             'student_number',
             'position',
-            'school_name',
+            'hub_school_name',
             'course_name',
             'user_email',
             'user_userDetail_first_name',
             'user_userDetail_last_name',
+            'program_name',
+            'program_course',
+            'program_id',
+            'course_id',
         ];
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function user()
@@ -63,11 +75,21 @@ class Student extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function hub()
+    {
+        return $this->belongsTo(Hub::class);
+    }
+
     public function setStudentNumberAttribute($value)
     {
         $year = Carbon::parse($this->attributes['created_at'])->format('y');
         $paddedId = str_pad($value, 7, '0', STR_PAD_LEFT);
 
         $this->attributes['student_number'] = "STD-$year-$paddedId";
+    }
+
+    public function coordinator()
+    {
+        return $this->belongsTo(Coordinator::class);
     }
 }

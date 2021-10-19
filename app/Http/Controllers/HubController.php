@@ -16,8 +16,16 @@ class HubController extends Controller
     public function index(ResourceFilters $filters, Hub $hub)
     {
         return $this->generateCachedResponse(function () use ($filters, $hub) {
-            $hubs = $hub->filter($filters);
-
+            if (request()->user()->account_type == 2) {
+                $hubs = $hub
+                    ->where('id', request()->user()->coordinator->hub_id)
+                    ->filter($filters)
+                    ->where('status', '!=', 2);
+            } else {
+                $hubs = $hub->filter($filters)
+                    ->where('status', '!=', 2);
+            }
+            $hubs->with(['school']);
             return $this->paginateOrGet($hubs);
         });
     }
@@ -90,7 +98,7 @@ class HubController extends Controller
      */
     public function destroy(Hub $hub)
     {
-        $hub->status = 0;
+        $hub->status = 2;
         $hub->save();
 
         return response($hub);

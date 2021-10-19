@@ -15,10 +15,25 @@ class Course extends Model
         'name',
         'description',
         'status',
+        'program_id',
     ];
+
+    public function searchable()
+    {
+        return [
+            'name',
+            'description',
+            'status',
+        ];
+    }
 
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 }
